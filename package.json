@@ -1,0 +1,56 @@
+{
+  "name": "lavy",
+  "version": "1.0.0-Alpha",
+  "description": "Leave it to me to handle code formatting and syntax checking, so you can concentrate on writing your program.",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "cli.js"
+  ],
+  "keywords": [
+    "eslint",
+    "tslint",
+    "prettier",
+    "editorconfig",
+    "stylelint",
+    "format"
+  ],
+  "scripts": {
+    "build": "rimraf dist && tsc --build tsconfig.json && npm run copy:files",
+    "copy:files": "copyfiles -s -E .*rc* .prettierignore  ./dist/",
+    "eslint": "eslint --ext .js,.ts --fix ./src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GavinBirkhoff/lavy.git"
+  },
+  "author": "Gavin Birkhoff <gavinbirkhoff@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GavinBirkhoff/lavy/issues"
+  },
+  "bin": {
+    "lavy": "./cli.js"
+  },
+  "homepage": "https://github.com/GavinBirkhoff/lavy#readme",
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.57.0",
+    "@typescript-eslint/parser": "^5.57.0",
+    "chalk": "^4.1.2",
+    "commander": "^10.0.0",
+    "eslint": "^8.37.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "fs-extra": "^11.1.1",
+    "inquirer": "^8.2.5",
+    "prettier": "^2.8.7",
+    "typescript": "^5.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.11",
+    "copyfiles": "^2.4.1",
+    "cross-env": "^7.0.3",
+    "np": "^7.7.0",
+    "rimraf": "^3.0.2"
+  }
+}
