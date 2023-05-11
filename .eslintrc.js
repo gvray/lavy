@@ -1,5 +1,3 @@
-const lavy = require('./dist/index')
 module.exports = {
-  // extends: [lavy.eslint]
-  ...lavy.eslint
+  extends: ['./typescript/index'].map(require.resolve)
 }

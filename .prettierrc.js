@@ -1,5 +1,11 @@
-const lavy = require('./dist/index')
-
 module.exports = {
-  ...lavy.prettier
+  semi: false,
+  singleQuote: true,
+  trailingComma: "none",
+  bracketSpacing: true,
+  printWidth: 120,
+  tabWidth: 2,
+  arrowParens: "always",
+  endOfLine: "auto",
+  quoteProps: "consistent"
 }
