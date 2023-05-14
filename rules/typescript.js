@@ -1,31 +1,27 @@
 module.exports = {
-  extends: [
-    'prettier',
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    ...['./prettier', './base/es6', './base/typescript'].map(require.resolve)
-  ],
-  env: {
-    browser: true,
-    es2021: true,
-    node: true
-  },
+  extends: ['plugin:@typescript-eslint/recommended'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    // project: './tsconfig.json',
-    ecmaVersion: 'latest',
-    sourceType: 'module'
+    project: './tsconfig.json', // default project config
+    createDefaultProgram: true, // 兼容未在 tsconfig.json 中 provided 的文件
+    sourceType: 'module',
+    extraFileExtensions: ['.vue']
   },
-  plugins: ['prettier'],
+  settings: {
+    // Apply special parsing for TypeScript files
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.d.ts', '.tsx']
+    },
+    // Use eslint-import-resolver-typescript
+    'import/resolver': {
+      typescript: {}
+    },
+    // Append 'ts' extensions to 'import/extensions' setting
+    'import/extensions': ['.js', '.ts', '.mjs']
+  },
+  plugins: ['prettier', '@typescript-eslint'],
   rules: {
-    'strict': ['error', 'never'],
-    // 优先使用 const，只有当变量会被重新赋值时才使用 let
-    'prefer-const': [
-      'error',
-      {
-        destructuring: 'any',
-        ignoreReadBeforeAssign: true
-      }
-    ]
+    '@typescript-eslint/no-var-requires': 'off',
+    '@typescript-eslint/no-empty-function': 'off'
   }
 }
