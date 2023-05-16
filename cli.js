@@ -40,7 +40,7 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
           choices: ['React', 'Vue', 'None']
         }
       ])
-      const filePath = join(cwd, 'eslintrc.js') // 文件路径
+      const filePath = join(cwd, '.eslintrc.js') // 文件路径
       const content =
         eslintTemplates[`${languageSelected}${frameSelected}`.toLowerCase()] ??
         `// no template
