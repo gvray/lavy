@@ -14,4 +14,7 @@ lavy --init
 # or Select Configuration
 lavy -i
 
+# show help
+lavy -h
+
 ```

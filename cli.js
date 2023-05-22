@@ -39,7 +39,8 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
           choices: ['React', 'Vue', 'None']
         }
       ])
-      // 根据输入项输出.eslintrc.js
+      console.log(chalk.green(`🏄‍♂️ Lavy is starting the setup for your project...`))
+      // 根据 options 输出 .eslintrc.js 适配的项目 code
       await changeFile(join(__dirname, 'template', 'eslint.tpl'), join(cwd, '.22eslintrc.js'), (str) => {
         const getLavy = () => {
           const pathName = []
@@ -58,6 +59,7 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
       await mvFile(join(__dirname, 'template', 'editorconfig.tpl'), join(cwd, '.22editorconfig'))
       await mvFile(join(__dirname, 'template', 'eslintignore.tpl'), join(cwd, '.22eslintignore'))
       await mvFile(join(__dirname, 'template', 'prettierrc.tpl'), join(cwd, '.22prettierrc.js'))
+      console.log(chalk.green('Lavy has finished, have a nice journey'), '🌈☀️')
     } catch (error) {
       console.error
     }
