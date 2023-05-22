@@ -1,22 +1,21 @@
 const fs = require('fs-extra')
-const packageJson = require('../package.json')
 
 async function mvFile(src, dest) {
   try {
     const content = await fs.readFile(src)
     await fs.writeFile(dest, content)
   } catch (error) {
-    console.log(error)
+    return Promise.reject(error)
   }
 }
 
-async function changeFile(src, dest) {
+async function changeFile(src, dest, pipe) {
   try {
     const data = await fs.readFile(src)
-    const str = data.toString().replace("require('./dist/index')", `require(${packageJson.name})`)
+    const str = pipe(data.toString())
     await fs.writeFile(dest, str)
   } catch (error) {
-    console.log(error)
+    return Promise.reject(error)
   }
 }
 

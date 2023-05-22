@@ -7,8 +7,7 @@ const chalk = require('chalk')
 const { existsSync } = require('fs')
 const { join } = require('path')
 const packageJson = require('./package.json')
-const eslintTemplates = require('./template/eslintTemplate')
-const { mvFile } = require('./utils')
+const { mvFile, changeFile } = require('./utils')
 
 const cwd = process.cwd()
 const program = new Command()
@@ -40,16 +39,25 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
           choices: ['React', 'Vue', 'None']
         }
       ])
-      const filePath = join(cwd, '.eslintrc.js') // 文件路径
-      const content =
-        eslintTemplates[`${languageSelected}${frameSelected}`.toLowerCase()] ??
-        `// no template
-`
-      await fs.writeFile(filePath, content)
+      // 根据输入项输出.eslintrc.js
+      await changeFile(join(__dirname, 'template', 'eslint.tpl'), join(cwd, '.22eslintrc.js'), (str) => {
+        const getLavy = () => {
+          const pathName = []
+          if (languageSelected !== 'Javascript') {
+            pathName.push(languageSelected.toLowerCase())
+          }
+          if (frameSelected !== 'None') {
+            pathName.push(frameSelected.toLowerCase())
+          }
+          return pathName.length > 0 ? `/${pathName.join('/')}` : ''
+        }
+        const newStr = str.replace('{{ eslintPath }}', `'lavy${getLavy()}'`)
+        return newStr
+      })
       // copy 一些文件
-      await mvFile(join(__dirname, 'template', 'editorconfigTemplate'), join(cwd, '.editorconfig'))
-      await mvFile(join(__dirname, 'template', 'eslintignoreTemplate'), join(cwd, '.eslintignore'))
-      await mvFile(join(__dirname, 'template', 'prettierrcTemplate.js'), join(cwd, '.prettierrc.js'))
+      await mvFile(join(__dirname, 'template', 'editorconfig.tpl'), join(cwd, '.22editorconfig'))
+      await mvFile(join(__dirname, 'template', 'eslintignore.tpl'), join(cwd, '.22eslintignore'))
+      await mvFile(join(__dirname, 'template', 'prettierrc.tpl'), join(cwd, '.22prettierrc.js'))
     } catch (error) {
       console.error
     }
