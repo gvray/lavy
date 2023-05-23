@@ -1,3 +1,3 @@
 module.exports = {
-  extends: [{{ eslintPath }}].map(require.resolve)
+  extends: [require.resolve({{ eslintPath }})]
 }

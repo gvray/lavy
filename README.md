@@ -9,12 +9,12 @@ An integrated project of eslint, stylelint, pretter and editor, that support jav
 
 npm install --save-dev lavy
 
-lavy --init
+npx lavy --init
 
 # or Select Configuration
-lavy -i
+npx lavy -i
 
 # show help
-lavy -h
+npx lavy -h
 
 ```

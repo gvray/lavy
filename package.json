@@ -1,6 +1,6 @@
 {
   "name": "lavy",
-  "version": "1.0.0-Alpha.1",
+  "version": "1.0.0-Alpha.3",
   "description": "Leave it to me to handle code formatting and syntax checking, so you can concentrate on writing your program.",
   "main": "./index.js",
   "files": [
@@ -75,6 +75,7 @@
     "@types/node": "^18.15.11",
     "copyfiles": "^2.4.1",
     "cross-env": "^7.0.3",
+    "mocha": "^10.2.0",
     "np": "^7.7.0",
     "rimraf": "^3.0.2"
   }
