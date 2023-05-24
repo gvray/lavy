@@ -69,6 +69,9 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
       await mvFile(join(__dirname, 'template', 'editorconfig.tpl'), join(cwd, '.22editorconfig'))
       await mvFile(join(__dirname, 'template', 'eslintignore.tpl'), join(cwd, '.22eslintignore'))
       await mvFile(join(__dirname, 'template', 'prettierrc.tpl'), join(cwd, '.22prettierrc.js'))
+      if (languageSelected === 'Typescript') {
+        await mvFile(join(__dirname, 'template', 'tsconfig.tpl'), join(cwd, '22tsconfig.json'))
+      }
       // editor
       if (editorSelected === 'Vscode') {
         await mvFile(join(__dirname, 'template', 'extensions.tpl'), join(cwd, '.vscode', 'extensions.json'))
