@@ -1,0 +1,36 @@
+// stylelint-demo.scss
+
+$primary-color: #ff0000;
+
+.button {
+  background-color: $primary-color;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: darken($primary-color, 10%);
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.container {
+  margin: 20px;
+
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .content {
+    margin-top: 10px;
+    color: #333;
+  }
+}

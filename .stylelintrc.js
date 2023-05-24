@@ -1,5 +1,3 @@
-const lavy = require('./dist/index')
-
 module.exports = {
-  ...lavy.stylelint
+  extends: [require.resolve('./style')]
 }

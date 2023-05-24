@@ -39,6 +39,16 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
           choices: ['React', 'Vue', 'None']
         }
       ])
+      const { styleSelected } = await inquirer.prompt([
+        {
+          type: 'list',
+          name: 'styleSelected',
+          prefix: '🏄‍♂️',
+          suffix: '',
+          message: 'Which style does your project use?',
+          choices: ['Css&Scss', 'None']
+        }
+      ])
       const { editorSelected } = await inquirer.prompt([
         {
           type: 'list',
@@ -51,7 +61,7 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
       ])
       console.log(chalk.green(`🏄‍♂️ Lavy is starting the setup for your project...`))
       // 根据 options 输出 .eslintrc.js 适配的项目 code
-      await changeFile(join(__dirname, 'template', 'eslint.tpl'), join(cwd, '.22eslintrc.js'), (str) => {
+      await changeFile(join(__dirname, 'template', 'eslint.tpl'), join(cwd, '22.eslintrc.js'), (str) => {
         const getLavy = () => {
           const pathName = []
           if (languageSelected !== 'Javascript') {
@@ -66,11 +76,16 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
         return newStr
       })
       // copy 一些文件
-      await mvFile(join(__dirname, 'template', 'editorconfig.tpl'), join(cwd, '.22editorconfig'))
-      await mvFile(join(__dirname, 'template', 'eslintignore.tpl'), join(cwd, '.22eslintignore'))
-      await mvFile(join(__dirname, 'template', 'prettierrc.tpl'), join(cwd, '.22prettierrc.js'))
+      await mvFile(join(__dirname, 'template', 'editorconfig.tpl'), join(cwd, '22.editorconfig'))
+      await mvFile(join(__dirname, 'template', 'eslintignore.tpl'), join(cwd, '22.eslintignore'))
+      await mvFile(join(__dirname, 'template', 'prettierrc.tpl'), join(cwd, '22.prettierrc.js'))
       if (languageSelected === 'Typescript') {
         await mvFile(join(__dirname, 'template', 'tsconfig.tpl'), join(cwd, '22tsconfig.json'))
+      }
+      if (styleSelected === 'Css&Scss') {
+        await changeFile(join(__dirname, 'template', 'stylelint.tpl'), join(cwd, '22.stylelintrc.js'), (str) =>
+          str.replace('{{ stylelintPath }}', `'lavy/style'`)
+        )
       }
       // editor
       if (editorSelected === 'Vscode') {
