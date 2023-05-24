@@ -3,6 +3,7 @@ const fs = require('fs-extra')
 async function mvFile(src, dest) {
   try {
     const content = await fs.readFile(src)
+    await fs.ensureFile(dest)
     await fs.writeFile(dest, content)
   } catch (error) {
     return Promise.reject(error)

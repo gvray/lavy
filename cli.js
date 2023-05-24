@@ -39,6 +39,16 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
           choices: ['React', 'Vue', 'None']
         }
       ])
+      const { editorSelected } = await inquirer.prompt([
+        {
+          type: 'list',
+          name: 'editorSelected',
+          prefix: '🏄‍♂️',
+          suffix: '',
+          message: 'Which editor does your project use?',
+          choices: ['Vscode', 'None']
+        }
+      ])
       console.log(chalk.green(`🏄‍♂️ Lavy is starting the setup for your project...`))
       // 根据 options 输出 .eslintrc.js 适配的项目 code
       await changeFile(join(__dirname, 'template', 'eslint.tpl'), join(cwd, '.22eslintrc.js'), (str) => {
@@ -59,9 +69,15 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
       await mvFile(join(__dirname, 'template', 'editorconfig.tpl'), join(cwd, '.22editorconfig'))
       await mvFile(join(__dirname, 'template', 'eslintignore.tpl'), join(cwd, '.22eslintignore'))
       await mvFile(join(__dirname, 'template', 'prettierrc.tpl'), join(cwd, '.22prettierrc.js'))
+      // editor
+      if (editorSelected === 'Vscode') {
+        await mvFile(join(__dirname, 'template', 'extensions.tpl'), join(cwd, '.vscode', 'extensions.json'))
+        await mvFile(join(__dirname, 'template', 'settings.tpl'), join(cwd, '.vscode', 'settings.json'))
+      }
+
       console.log(chalk.green('Lavy has finished, have a nice journey'), '🌈☀️')
     } catch (error) {
-      console.error
+      console.error(error)
     }
   }
   if (!options || !Object.keys(options).length) {
