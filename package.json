@@ -1,6 +1,6 @@
 {
-  "name": "lavy",
-  "version": "1.0.0-Alpha.5",
+  "private": true,
+  "version": "1.0.0",
   "description": "Leave it to me to handle code formatting and syntax checking, so you can concentrate on writing your program.",
   "workspaces": [
     "./packages/*"
