@@ -1,23 +1,28 @@
 module.exports = {
-  extends: [
-    'prettier',
-    'eslint:recommended',
-    // 'plugin:import/recommended',
-    ...['./rules/prettier', './rules/base/variables', './rules/base/es6', './rules/base/strict', './rules/imports'].map(
-      require.resolve
-    )
-  ],
-  parser: '@babel/eslint-parser',
-  plugins: ['prettier'],
-  parserOptions: {
-    requireConfigFile: false,
-    ecmaVersion: 2020,
-    sourceType: 'module',
-    ecmaFeatures: {
-      globalReturn: false,
-      impliedStrict: true,
-      jsx: true
-    }
-  },
-  root: true
+  extends: 'stylelint-config-standard',
+  rules: {
+    indentation: 2,
+    'color-no-invalid-hex': true,
+    'declaration-colon-space-after': 'always',
+    'declaration-colon-space-before': 'never',
+    'selector-pseudo-class-no-unknown': [
+      true,
+      {
+        ignorePseudoClasses: ['global']
+      }
+    ],
+    'selector-type-no-unknown': [
+      true,
+      {
+        ignoreTypes: ['/^v-/']
+      }
+    ],
+    'property-no-unknown': [
+      true,
+      {
+        ignoreProperties: ['composes']
+      }
+    ],
+    'no-empty-source': null
+  }
 }
