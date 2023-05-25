@@ -1,3 +1,3 @@
 module.exports = {
-  extends: [require.resolve('./typescript/index')]
+  extends: [require.resolve('./packages/eslint-config-lavy/typescript/index')]
 }

@@ -1,3 +1,3 @@
 module.exports = {
-  extends: [require.resolve('./style')]
+  extends: [require.resolve('./packages/stylelint-config-lavy')]
 }
