@@ -8,10 +8,7 @@
     "stylelint-config"
   ],
   "scripts": {
-    "lint": "eslint ./",
-    "test": "mocha ./test/*.test.js --timeout 5000",
-    "print-config": "eslint --print-config ./index.js > ./print-config.json",
-    "prepublishOnly": "npm run test"
+    "lint": "eslint ./"
   },
   "repository": {
     "type": "git",
