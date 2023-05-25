@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-lavy",
-  "version": "1.0.0-Alpha.0",
+  "version": "1.0.0-Alpha.1",
   "description": "Leave it to me to handle code formatting and syntax checking, so you can concentrate on writing your program.",
   "main": "./index.js",
   "keywords": [
