@@ -39,13 +39,14 @@
     "node": ">=16"
   },
   "peerDependencies": {
-    "eslint": "7.x",
-    "stylelint": "14.x"
+    "eslint": "^7.32.0",
+    "stylelint": "^14.16.1"
   },
   "dependencies": {
     "chalk": "^4.1.2",
     "commander": "^10.0.0",
-    "eslint": "^7.0.0",
+    "cross-spawn": "^7.0.3",
+    "eslint": "^7.32.0",
     "fs-extra": "^11.1.1",
     "inquirer": "^8.2.5",
     "prettier": "^2.8.7",

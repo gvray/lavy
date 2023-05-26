@@ -2,12 +2,11 @@
 
 const { Command } = require('commander')
 const inquirer = require('inquirer')
-const fs = require('fs-extra')
 const chalk = require('chalk')
 const { existsSync } = require('fs')
 const { join } = require('path')
 const packageJson = require('./package.json')
-const { mvFile, changeFile } = require('./utils')
+const { mvFile, changeFile, installPackage } = require('./utils')
 
 const cwd = process.cwd()
 const program = new Command()
@@ -91,6 +90,12 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
       if (editorSelected === 'Vscode') {
         await mvFile(join(__dirname, 'template', 'extensions.tpl'), join(cwd, '.vscode', 'extensions.json'))
         await mvFile(join(__dirname, 'template', 'settings.tpl'), join(cwd, '.vscode', 'settings.json'))
+      }
+
+      // install package
+      await installPackage('eslint-config-lavy')
+      if (styleSelected === 'Css&Scss') {
+        await installPackage('stylelint-config-lavy')
       }
 
       console.log(chalk.green('Lavy has finished, have a nice journey'), '🌈☀️')

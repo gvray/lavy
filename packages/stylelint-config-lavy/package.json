@@ -30,7 +30,7 @@
     "node": ">=16"
   },
   "peerDependencies": {
-    "stylelint": "14.x"
+    "stylelint": "^14.16.1"
   },
   "dependencies": {
     "prettier": "^2.8.7",
