@@ -1,11 +1,14 @@
 {
   "name": "stylelint-config-lavy",
-  "version": "1.0.0-Alpha.0",
-  "description": "Leave it to me to handle code formatting and syntax checking, so you can concentrate on writing your program.",
+  "version": "1.0.0-Alpha.3",
+  "description": "Stylelint config with standard and prettier",
   "main": "./index.js",
   "keywords": [
     "stylelint",
-    "stylelint-config"
+    "stylelint-config",
+    "config-standard",
+    "prettier",
+    "lavy"
   ],
   "scripts": {
     "lint": "eslint ./"

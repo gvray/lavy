@@ -7,7 +7,8 @@
   ],
   "scripts": {
     "lint": "eslint ./",
-    "clear": "rimraf node_modules packages/*/node_modules"
+    "clear": "rimraf node_modules packages/*/node_modules",
+    "pub": "npm publish --workspaces"
   },
   "repository": {
     "type": "git",

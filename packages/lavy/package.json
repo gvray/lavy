@@ -1,25 +1,22 @@
 {
   "name": "lavy",
-  "version": "1.0.0-Alpha.5",
-  "description": "Leave it to me to handle code formatting and syntax checking, so you can concentrate on writing your program.",
+  "version": "1.0.0-Alpha.8",
+  "description": "Codelint cli that escort for our code programming.",
   "main": "./index.js",
-  "files": [
-    "template",
-    "utils",
-    "cli.js",
-    "index.js"
-  ],
   "keywords": [
     "eslint",
-    "tslint",
-    "prettier",
-    "editorconfig",
     "stylelint",
-    "format"
+    "prettier",
+    "prettierconfig",
+    "editorconfig",
+    "tsconfig",
+    "auto-format",
+    "vscode-settings",
+    "lint-cli"
   ],
   "scripts": {
     "lint": "eslint ./",
-    "test": "mocha ./test/*.test.js --timeout 5000",
+    "test": "mocha ./__test__/*.test.js --timeout 5000",
     "prepublishOnly": "npm run test"
   },
   "repository": {
