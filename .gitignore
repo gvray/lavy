@@ -1,5 +1,7 @@
 node_modules
+./*/node_modules
 .DS_Store
 .idea
 # .vscode
 print-config.json
+./*/print-config.json
