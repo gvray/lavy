@@ -6,7 +6,8 @@
     "./packages/*"
   ],
   "scripts": {
-    "lint": "eslint ./"
+    "lint": "eslint ./",
+    "clear": "rimraf node_modules packages/*/node_modules"
   },
   "repository": {
     "type": "git",
