@@ -27,7 +27,7 @@
     "node": ">=16"
   },
   "peerDependencies": {
-    "eslint": "14.x"
+    "stylelint": "14.x"
   },
   "dependencies": {
     "prettier": "^2.8.7",

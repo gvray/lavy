@@ -5,14 +5,9 @@
   "main": "./index.js",
   "files": [
     "template",
-    "typescript",
-    "rules",
+    "utils",
     "cli.js",
-    "index.js",
-    "react.js",
-    "vue.js",
-    "style.js",
-    "utils"
+    "index.js"
   ],
   "keywords": [
     "eslint",
