@@ -60,7 +60,7 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
       ])
       console.log(chalk.green(`🏄‍♂️ Lavy is starting the setup for your project...`))
       // 根据 options 输出 .eslintrc.js 适配的项目 code
-      await changeFile(join(__dirname, 'template', 'eslint.tpl'), join(cwd, '22.eslintrc.js'), (str) => {
+      await changeFile(join(__dirname, 'template', 'eslint.tpl'), join(cwd, '.eslintrc.js'), (str) => {
         const getLavy = () => {
           const pathName = []
           if (languageSelected !== 'Javascript') {
@@ -75,14 +75,14 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
         return newStr
       })
       // copy 一些文件
-      await mvFile(join(__dirname, 'template', 'editorconfig.tpl'), join(cwd, '22.editorconfig'))
-      await mvFile(join(__dirname, 'template', 'eslintignore.tpl'), join(cwd, '22.eslintignore'))
-      await mvFile(join(__dirname, 'template', 'prettierrc.tpl'), join(cwd, '22.prettierrc.js'))
+      await mvFile(join(__dirname, 'template', 'editorconfig.tpl'), join(cwd, '.editorconfig'))
+      await mvFile(join(__dirname, 'template', 'eslintignore.tpl'), join(cwd, '.eslintignore'))
+      await mvFile(join(__dirname, 'template', 'prettierrc.tpl'), join(cwd, '.prettierrc.js'))
       if (languageSelected === 'Typescript') {
-        await mvFile(join(__dirname, 'template', 'tsconfig.tpl'), join(cwd, '22tsconfig.json'))
+        await mvFile(join(__dirname, 'template', 'tsconfig.tpl'), join(cwd, 'tsconfig.json'))
       }
       if (styleSelected === 'Css&Scss') {
-        await changeFile(join(__dirname, 'template', 'stylelint.tpl'), join(cwd, '22.stylelintrc.js'), (str) =>
+        await changeFile(join(__dirname, 'template', 'stylelint.tpl'), join(cwd, '.stylelintrc.js'), (str) =>
           str.replace('{{ stylelintPath }}', `'lavy'`)
         )
       }
@@ -101,6 +101,7 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
       console.log(chalk.green('Lavy has finished, have a nice journey'), '🌈☀️')
     } catch (error) {
       console.error(error)
+      process.exit(1)
     }
   }
   if (!options || !Object.keys(options).length) {
