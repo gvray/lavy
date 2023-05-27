@@ -1,6 +1,6 @@
 {
   "name": "lavy",
-  "version": "1.0.0-Alpha.8",
+  "version": "1.0.0-Alpha.18",
   "description": "Codelint cli that escort for our code programming.",
   "main": "./index.js",
   "keywords": [
