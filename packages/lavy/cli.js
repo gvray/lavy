@@ -25,7 +25,7 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
           prefix: '🏄‍♂️',
           suffix: '',
           message: 'Which language does your project use?',
-          choices: ['Javascript', 'Typescript']
+          choices: ['Typescript', 'Javascript']
         }
       ])
       const { frameSelected } = await inquirer.prompt([
@@ -58,6 +58,7 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
           choices: ['Vscode', 'None']
         }
       ])
+
       console.log(chalk.green(`🏄‍♂️ Lavy is starting the setup for your project...`))
       // 根据 options 输出 .eslintrc.js 适配的项目 code
       await changeFile(join(__dirname, 'template', 'eslint.tpl'), join(cwd, '.eslintrc.js'), (str) => {
@@ -100,7 +101,7 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
 
       console.log(chalk.green('Lavy has finished, have a nice journey'), '🌈☀️')
     } catch (error) {
-      console.error(error)
+      console.log(chalk.red(error))
       process.exit(1)
     }
   }
