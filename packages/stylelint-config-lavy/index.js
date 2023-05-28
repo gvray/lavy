@@ -5,6 +5,8 @@ module.exports = {
     indentation: 2,
     'at-rule-no-unknown': null,
     'color-no-invalid-hex': true,
+    'comment-no-empty': true,
+    'block-no-empty': null,
     'declaration-colon-space-after': 'always',
     'declaration-colon-space-before': 'never',
     'selector-pseudo-class-no-unknown': [
