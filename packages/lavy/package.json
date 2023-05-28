@@ -40,7 +40,7 @@
   },
   "peerDependencies": {
     "eslint": "^7.32.0",
-    "stylelint": "^14.16.1"
+    "stylelint": "14.x"
   },
   "dependencies": {
     "chalk": "^4.1.2",
@@ -50,7 +50,7 @@
     "fs-extra": "^11.1.1",
     "inquirer": "^8.2.5",
     "prettier": "^2.8.7",
-    "stylelint": "^14.16.1",
+    "stylelint": "14.x",
     "typescript": "^5.0.3"
   }
 }
