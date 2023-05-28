@@ -37,3 +37,11 @@ body {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.list-item {
+  width: 100px;
+}
+
+.listItem {
+  width: 100;
+}
