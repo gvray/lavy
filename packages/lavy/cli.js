@@ -45,7 +45,7 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
           prefix: '🏄‍♂️',
           suffix: '',
           message: 'Which style does your project use?',
-          choices: ['Css&Scss', 'None']
+          choices: ['Css', 'None']
         }
       ])
       const { editorSelected } = await inquirer.prompt([
@@ -82,7 +82,7 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
       if (languageSelected === 'Typescript') {
         await mvFile(join(__dirname, 'template', 'tsconfig.tpl'), join(cwd, 'tsconfig.json'))
       }
-      if (styleSelected === 'Css&Scss') {
+      if (styleSelected === 'Css') {
         await changeFile(join(__dirname, 'template', 'stylelint.tpl'), join(cwd, '.stylelintrc.js'), (str) =>
           str.replace('{{ stylelintPath }}', `'lavy'`)
         )
@@ -95,7 +95,7 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
 
       // install package
       await installPackage('eslint-config-lavy')
-      if (styleSelected === 'Css&Scss') {
+      if (styleSelected === 'Css') {
         await installPackage('stylelint-config-lavy')
       }
 
