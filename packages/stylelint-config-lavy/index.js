@@ -1,7 +1,9 @@
 module.exports = {
-  extends: 'stylelint-config-standard',
+  defaultSeverity: 'warning',
+  extends: ['stylelint-config-standard'],
   rules: {
     indentation: 2,
+    'at-rule-no-unknown': null,
     'color-no-invalid-hex': true,
     'declaration-colon-space-after': 'always',
     'declaration-colon-space-before': 'never',
@@ -24,5 +26,6 @@ module.exports = {
       }
     ],
     'no-empty-source': null
-  }
+  },
+  ignoreFiles: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx']
 }
