@@ -1,6 +1,6 @@
 # lavy
 
-Codelint cli that escort for our code programming.
+🛠️ Codelint cli that escort for our code programming.
 
 # Usage
 
