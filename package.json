@@ -1,7 +1,7 @@
 {
   "private": true,
   "version": "1.0.0",
-  "description": "Leave it to me to handle code formatting and syntax checking, so you can concentrate on writing your program.",
+  "description": "🛠️ Codelint cli that escort for our code programming.",
   "workspaces": [
     "./packages/*"
   ],
