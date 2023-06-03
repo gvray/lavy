@@ -84,7 +84,7 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
       }
       if (styleSelected === 'Css') {
         await changeFile(join(__dirname, 'template', 'stylelint.tpl'), join(cwd, '.stylelintrc.js'), (str) =>
-          str.replace('{{ stylelintPath }}', `'lavy'`)
+          str.replace('{{ stylelintPath }}', `'stylelint-config-lavy'`)
         )
       }
       // editor
