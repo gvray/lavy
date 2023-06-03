@@ -1,6 +1,6 @@
 {
   "name": "stylelint-config-lavy",
-  "version": "1.0.0-Alpha.3",
+  "version": "1.0.1-Alpha.0",
   "description": "Stylelint config with standard and prettier.",
   "main": "./index.js",
   "keywords": [
