@@ -3,6 +3,13 @@
   "version": "1.0.1-Alpha.0",
   "description": "Codelint cli that escort for our code programming.",
   "main": "./index.js",
+  "files": [
+    "template/",
+    "utils",
+    "cli.js",
+    "index.js",
+    "tsconfig.base.json"
+  ],
   "keywords": [
     "eslint",
     "stylelint",
