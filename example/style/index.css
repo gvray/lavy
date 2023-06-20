@@ -39,9 +39,21 @@ body {
 }
 
 .list-item {
-  width: 100px;
+  width: 100;
+  padding: 10;
+  width: 100;
 }
 
 .listItem {
   width: 100;
+}
+
+.selector {
+  margin: 0;
+  padding: 10px;
+  background-color: #fff;
+}
+
+#my {
+  color: #f00;
 }

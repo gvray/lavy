@@ -343,7 +343,7 @@ module.exports = {
         extensions: ['.js', '.jsx', '.json']
       }
     },
-    'react': {
+    react: {
       pragma: 'React',
       version: 'detect'
     }

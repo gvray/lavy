@@ -6,7 +6,7 @@
     "./packages/*"
   ],
   "scripts": {
-    "lint": "eslint ./",
+    "lint": "eslint ./ --fix",
     "clear": "rimraf node_modules packages/*/node_modules",
     "pub": "npm publish --workspaces"
   },
