@@ -23,5 +23,22 @@ module.exports = {
   rules: {
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/no-empty-function': 'off'
-  }
+  },
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      rules: {
+        // Disable `no-undef` rule within TypeScript files because it incorrectly errors when exporting default interfaces
+        // https://github.com/iamturns/eslint-config-airbnb-typescript/issues/50
+        // This will be caught by TypeScript compiler if `strictNullChecks` (or `strict`) is enabled
+        'no-undef': 'off',
+
+        /* Using TypeScript makes it safe enough to disable the checks below */
+
+        // Disable ESLint-based module resolution check for improved monorepo support
+        // https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-unresolved.md
+        'import/no-unresolved': 'off'
+      }
+    }
+  ]
 }

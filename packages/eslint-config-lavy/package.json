@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-lavy",
-  "version": "1.0.1-Alpha.1",
+  "version": "1.0.1-Alpha.2",
   "description": "Eslint config with typescript, react, vue, and prettier.",
   "main": "./index.js",
   "files": [
@@ -59,6 +59,6 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-vue": "^9.12.0",
     "prettier": "^2.8.7",
-    "typescript": "^5.0.3"
+    "typescript": "~5.0.3"
   }
 }
