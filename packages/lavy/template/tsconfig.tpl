@@ -1,5 +1,5 @@
 {
-  "extends": ["lavy/tsconfig.base.json"],
+  "extends": "lavy/tsconfig.base.json",
   "compilerOptions": {
     "target": "ESNEXT",
     "module": "commonjs",
