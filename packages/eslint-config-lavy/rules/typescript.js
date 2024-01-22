@@ -22,7 +22,8 @@ module.exports = {
   plugins: ['prettier', '@typescript-eslint'],
   rules: {
     '@typescript-eslint/no-var-requires': 'off',
-    '@typescript-eslint/no-empty-function': 'off'
+    '@typescript-eslint/no-empty-function': 'off',
+    '@typescript-eslint/no-shadow': 'error'
   },
   overrides: [
     {
