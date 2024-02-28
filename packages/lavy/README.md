@@ -18,6 +18,14 @@ npx lavy -h
 
 ```
 
+## verify-commit
+
+```shell
+
+npx lavy verify-commit
+
+```
+
 # eslint-config-lavy
 
 Eslint config with typescript, react, vue, and prettier

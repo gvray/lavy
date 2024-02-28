@@ -1,6 +1,7 @@
 const fs = require('fs-extra')
 const { spawn } = require('cross-spawn')
 const chalk = require('chalk')
+const emoji = require('./emoji')
 
 async function mvFile(src, dest) {
   try {
@@ -64,8 +65,14 @@ function installPackage(...dependencies) {
   })
 }
 
+function removeComment(msg) {
+  return msg.replace(/^#.*[\n\r]*/gm, '')
+}
+
 module.exports = {
   mvFile,
   changeFile,
-  installPackage
+  installPackage,
+  removeComment,
+  emoji
 }

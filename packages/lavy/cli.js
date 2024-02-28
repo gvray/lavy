@@ -3,10 +3,10 @@
 const { Command } = require('commander')
 const inquirer = require('inquirer')
 const chalk = require('chalk')
-const { existsSync } = require('fs')
+const { existsSync, readFileSync } = require('fs')
 const { join } = require('path')
 const packageJson = require('./package.json')
-const { mvFile, changeFile, installPackage } = require('./utils')
+const { mvFile, changeFile, installPackage, removeComment, emoji } = require('./utils')
 
 const cwd = process.cwd()
 const program = new Command()
@@ -109,6 +109,70 @@ program.option('-i, --init', 'Initialize the program').action(async (options) =>
     program.help()
   }
 })
+
+// 创建 verify-commit命令
+
+program
+  .command('verify-commit')
+  .description('Verify the commit message.')
+  .argument('[commit-message]', 'The commit message to verify')
+  .action(async (commitMessage) => {
+    let message
+    if (!commitMessage) {
+      const msgPath = process.env.GIT_PARAMS || process.env.HUSKY_GIT_PARAMS
+      if (!msgPath) {
+        console.log(chalk.red('No match GIT_PARAMS or HUSKY_GIT_PARAMS'))
+        process.exit(1)
+      }
+      message = readFileSync(msgPath, 'utf-8')
+    } else {
+      message = commitMessage
+    }
+    if (!message) {
+      console.log(chalk.red('No commit message found.'))
+      process.exit(1)
+    }
+    message = removeComment(message.trim())
+    const scope = [
+      'feat',
+      'fix',
+      'docs',
+      'style',
+      'refactor',
+      'perf',
+      'test',
+      'workflow',
+      'build',
+      'ci',
+      'chore',
+      'types',
+      'wip',
+      'release',
+      'dep',
+      'deps',
+      'example',
+      'examples',
+      'merge',
+      'revert'
+    ]
+    // Define your commit message verification logic here
+    // const pattern = /^(feat|fix|docs|style|refactor|perf|test|chore)(\(.+\))?: .{1,50}/
+    const pattern = new RegExp(`^((${emoji}(${scope.join('|')})(\\(.+\\))?:)|(Merge|Revert|Version)) .{1,50}`, 'i')
+    if (!pattern.test(message)) {
+      console.log('Commit message is valid.')
+      console.log()
+      console.log(`Error: ${chalk.red(`Invalid commit message format.`)}`)
+      console.log()
+      console.log(`Proper commit message format is required for automated changelog generation.`)
+      console.log(`Examples:`)
+      console.log()
+      console.log(chalk.green(`  chore(release): update changelog`))
+      console.log(chalk.green(`  fix(core): handle events on blur (close #188)`))
+      console.log(chalk.green(`  📖 docs(core): update docs`))
+      console.log()
+      process.exit(1)
+    }
+  })
 
 // 保存原始的 unknownOption 方法
 const originalUnknownOption = program.unknownOption
