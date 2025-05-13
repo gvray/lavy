@@ -1,18 +1,32 @@
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true,
-  "prettier.requireConfig": true,
-  "eslint.enable": true,
-  "eslint.format.enable": true,
-  "eslint.run": "onType",
-  "eslint.probe": ["javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "javascriptvue"],
-  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "javascriptvue"],
-  "eslint.execArgv": null,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.prettier": "explicit",
-    "source.fixAll.eslint": "explicit",
-    "source.fixAll.stylelint": "explicit",
-    "source.fixAll.markdownlint": "explicit"
-  },
-  "editor.guides.highlightActiveIndentation": true
+	"editor.defaultFormatter": "esbenp.prettier-vscode",
+	"editor.formatOnSave": true,
+	"prettier.requireConfig": true,
+	"eslint.enable": true,
+	"eslint.format.enable": true,
+	"eslint.run": "onType",
+	"eslint.probe": [
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"typescriptreact",
+		"vue",
+		"javascriptvue"
+	],
+	"eslint.validate": [
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"typescriptreact",
+		"vue",
+		"javascriptvue"
+	],
+	"eslint.execArgv": null,
+	"editor.codeActionsOnSave": {
+		"source.fixAll.prettier": "explicit",
+		"source.fixAll.eslint": "explicit",
+		"source.fixAll.stylelint": "explicit",
+		"source.fixAll.markdownlint": "explicit"
+	},
+	"editor.guides.highlightActiveIndentation": true
 }

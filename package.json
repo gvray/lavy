@@ -1,34 +1,36 @@
 {
-  "private": true,
-  "version": "1.0.2-Alpha",
-  "description": "🛠️ Codelint cli that escort for our code programming.",
-  "workspaces": [
-    "./packages/*"
-  ],
-  "scripts": {
-    "lint": "eslint ./ --fix",
-    "clear": "rimraf node_modules packages/*/node_modules",
-    "pub": "npm publish --workspaces"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/GavinBirkhoff/lavy.git"
-  },
-  "author": {
-    "name": "GavinBirkhoff",
-    "email": "gavinbirkhoff@gmail.com"
-  },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/GavinBirkhoff/lavy/issues"
-  },
-  "homepage": "https://github.com/GavinBirkhoff/lavy#readme",
-  "devDependencies": {
-    "@types/node": "^18.15.11",
-    "copyfiles": "^2.4.1",
-    "cross-env": "^7.0.3",
-    "mocha": "^10.2.0",
-    "np": "^7.7.0",
-    "rimraf": "^3.0.2"
-  }
+	"private": true,
+	"version": "1.0.0",
+	"description": "🛠️ Codelint cli that escort for our code programming.",
+	"scripts": {
+		"clear": "rimraf node_modules packages/*/node_modules",
+		"pub": "pnpm -r publish",
+		"format": "biome format --write .",
+		"lint": "biome lint .",
+		"fix": "biome check --write .",
+		"ci": "biome ci ."
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/GavinBirkhoff/lavy.git"
+	},
+	"author": {
+		"name": "GavinBirkhoff",
+		"email": "gavinbirkhoff@gmail.com"
+	},
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/GavinBirkhoff/lavy/issues"
+	},
+	"homepage": "https://github.com/GavinBirkhoff/lavy#readme",
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@types/node": "^18.15.11",
+		"copyfiles": "^2.4.1",
+		"cross-env": "^7.0.3",
+		"mocha": "^10.2.0",
+		"np": "^7.7.0",
+		"rimraf": "^3.0.2",
+		"typescript": "~5.0.3"
+	}
 }

@@ -5,3 +5,4 @@ node_modules
 # .vscode
 print-config.json
 ./*/print-config.json
+.packages/*

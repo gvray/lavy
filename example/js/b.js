@@ -2,7 +2,7 @@
 
 // console.log(a)
 
-const mm = {}
+const mm = {};
 
 // export default mm
-module.exports = {}
+module.exports = {};

@@ -1,5 +1,5 @@
 // import b from './b'
-const m = require('./b')
+const m = require("./b");
 
 // console.log(m)
-const a = 1
+const a = 1;
