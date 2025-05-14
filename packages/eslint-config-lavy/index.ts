@@ -9,7 +9,7 @@ module.exports = {
 			"./rules/base/es6",
 			"./rules/base/strict",
 			"./rules/imports",
-		].map(require.resolve),
+		],
 	],
 	parser: "@babel/eslint-parser",
 	plugins: ["prettier"],

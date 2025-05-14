@@ -1,6 +1,6 @@
-import fs from "fs-extra";
-import { spawn } from "cross-spawn";
 import chalk from "chalk";
+import { spawn } from "cross-spawn";
+import fs from "fs-extra";
 import emoji from "./emoji";
 
 /**
@@ -27,7 +27,7 @@ async function mvFile(src: string, dest: string): Promise<void> {
 async function changeFile(
 	src: string,
 	dest: string,
-	pipe: (content: string) => string
+	pipe: (content: string) => string,
 ): Promise<void> {
 	try {
 		const data = await fs.readFile(src);
@@ -70,22 +70,22 @@ function installPackage(...dependencies: string[]): Promise<string[]> {
 		const childProcess = spawn(
 			command,
 			installCommand.concat(...dependencies),
-			{ stdio: "inherit" }
+			{ stdio: "inherit" },
 		);
 
 		childProcess.on("close", (code: number) => {
 			if (code !== 0) {
 				console.log(
 					chalk.red("Error occurred while installing dependencies!"),
-					`with code ${code}`
+					`with code ${code}`,
 				);
 				reject(
-					`❌ Unable to install dependencies, manually install dependencies according to the specific conditions of your project, such as npm yarn or pnpm, the next dependencies you need to see ${dependencies.toString()} 🔧`
+					`❌ Unable to install dependencies, manually install dependencies according to the specific conditions of your project, such as npm yarn or pnpm, the next dependencies you need to see ${dependencies.toString()} 🔧`,
 				);
 				// process.exit(1)
 			} else {
 				console.log(
-					chalk.cyan(`Install finished with ${dependencies.toString()}`)
+					chalk.cyan(`Install finished with ${dependencies.toString()}`),
 				);
 				resolve(dependencies);
 			}
@@ -102,10 +102,4 @@ function removeComment(msg: string): string {
 	return msg.replace(/^#.*[\n\r]*/gm, "");
 }
 
-export {
-	mvFile,
-	changeFile,
-	installPackage,
-	removeComment,
-	emoji
-};
+export { mvFile, changeFile, installPackage, removeComment, emoji };

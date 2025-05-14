@@ -1,8 +1,8 @@
 {
 	"extends": "../../tsconfig.base.json",
-	"include": ["**/*.ts"],
+	"include": ["**/*.ts","package.json"  ],
 	"compilerOptions": {
-		"tsBuildInfoFile": "./node_modules/.tmp/stylelint-config-lavy/tsconfig.node.tsbuildinfo",
+		"tsBuildInfoFile": "./node_modules/.tmp/lavy/tsconfig.node.tsbuildinfo",
 		"resolveJsonModule": true, // ✅ 允许导入 JSON 文件
 		"esModuleInterop": true, // ✅ 配合使用，支持 default 导出
 		"module": "esnext", // 或 "commonjs" 也可以

@@ -3,22 +3,8 @@
 	"version": "1.0.2-Alpha.1",
 	"description": "Eslint config with typescript, react, vue, and prettier.",
 	"main": "./index.js",
-	"files": [
-		"rules",
-		"typescript",
-		"utils",
-		"index.js",
-		"react.js",
-		"vue.js"
-	],
-	"keywords": [
-		"eslint",
-		"eslintconfig",
-		"lavy",
-		"typescript",
-		"react",
-		"vue"
-	],
+	"files": ["rules", "typescript", "utils", "index.js", "react.js", "vue.js"],
+	"keywords": ["eslint", "eslintconfig", "lavy", "typescript", "react", "vue"],
 	"type": "module",
 	"scripts": {
 		"lint": "eslint ./",

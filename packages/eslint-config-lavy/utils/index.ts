@@ -1,6 +1,6 @@
 const fs = require("fs-extra");
 
-async function mvFile(src, dest) {
+async function mvFile(src: any, dest: any) {
 	try {
 		const content = await fs.readFile(src);
 		await fs.ensureFile(dest);
@@ -10,7 +10,7 @@ async function mvFile(src, dest) {
 	}
 }
 
-async function changeFile(src, dest, pipe) {
+async function changeFile(src: string, dest: any, pipe: (arg0: any) => any) {
 	try {
 		const data = await fs.readFile(src);
 		const str = pipe(data.toString());
