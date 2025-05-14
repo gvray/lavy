@@ -1,3 +1,3 @@
-module.exports = {
-	extends: ["../index", "../rules/typescript"].map(require.resolve),
+export default {
+	extends: ["../index", "../rules/typescript"],
 };

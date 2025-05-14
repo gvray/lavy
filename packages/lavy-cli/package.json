@@ -3,7 +3,14 @@
 	"version": "1.1.0",
 	"description": "Codelint cli that escort for our code programming.",
 	"main": "./index.js",
-	"files": ["template/", "utils", "cli.js", "index.js", "tsconfig.base.json"],
+	"files": [
+		"template/",
+		"utils",
+		"cli.js",
+		"index.js",
+		"tsconfig.base.json"
+	],
+	"type": "module",
 	"keywords": [
 		"eslint",
 		"stylelint",
@@ -53,5 +60,10 @@
 		"prettier": "^2.8.7",
 		"stylelint": "14.x",
 		"typescript": "~5.0.3"
+	},
+	"devDependencies": {
+		"@types/cross-spawn": "^6.0.6",
+		"@types/fs-extra": "^11.0.4",
+		"@types/inquirer": "^9.0.8"
 	}
 }

@@ -3,7 +3,7 @@
  * @link https://eslint.vuejs.org/rules/
  */
 
-module.exports = {
+export default {
 	parser: "vue-eslint-parser",
 	plugins: ["vue"],
 	rules: {

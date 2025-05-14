@@ -5,7 +5,7 @@
  * @see https://github.com/import-js/eslint-plugin-import/blob/main/config/recommended.js
  */
 
-module.exports = {
+export default  {
 	plugins: ["import"],
 
 	rules: {

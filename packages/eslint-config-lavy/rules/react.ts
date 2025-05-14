@@ -4,7 +4,7 @@
  * @link https://www.npmjs.com/package/eslint-plugin-react-hooks
  */
 
-module.exports = {
+export default {
 	plugins: ["react", "react-hooks"],
 	rules: {
 		// https://github.com/alibaba/f2e-spec/issues/95

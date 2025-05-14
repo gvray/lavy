@@ -11,7 +11,7 @@
 		// "disableReferencedProjectLoad": true,             /* 减少TypeScript自动加载的项目数量。 */
 
 		/* 语言和环境 */
-		"target": "es2016" /* 设置生成的JavaScript的JavaScript语言版本，并包含兼容的库声明。 */,
+		"target": "ESNext" /* 设置生成的JavaScript的JavaScript语言版本，并包含兼容的库声明。 */,
 		// "lib": [],                                        /* 指定一组描述目标运行时环境的捆绑库声明文件。 */
 		// "jsx": "preserve",                                /* 指定生成什么JSX代码。 */
 		// "experimentalDecorators": true,                   /* 启用对传统实验性装饰器的实验性支持。 */
@@ -25,7 +25,7 @@
 		// "moduleDetection": "auto",                        /* 控制用于检测模块格式JS文件的方法。 */
 
 		/* 模块 */
-		"module": "commonjs" /* 指定生成的模块代码。 */,
+		"module": "ESNext" /* 指定生成的模块代码。 */,
 		// "rootDir": "./",                                  /* 指定源文件中的根文件夹。 */
 		// "moduleResolution": "node10",                     /* 指定TypeScript如何从给定的模块说明符查找文件。 */
 		// "baseUrl": "./",                                  /* 指定用于解析非相对模块名称的基本目录。 */

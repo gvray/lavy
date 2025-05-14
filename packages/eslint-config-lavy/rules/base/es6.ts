@@ -1,4 +1,4 @@
-module.exports = {
+export default {
 	rules: {
 		// 箭头函数-函数体风格
 		// @reason 允许灵活使用

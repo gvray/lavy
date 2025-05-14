@@ -2,6 +2,7 @@
 	"private": true,
 	"version": "1.0.0",
 	"description": "🛠️ Codelint cli that escort for our code programming.",
+	"type": "module",
 	"scripts": {
 		"clear": "rimraf node_modules packages/*/node_modules",
 		"pub": "pnpm -r publish",
