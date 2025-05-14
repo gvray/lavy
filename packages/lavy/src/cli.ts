@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 import chalk from "chalk";
 //@ts-nocheck
 import { Command } from "commander";
 import inquirer from "inquirer";
-import packageJson from "./package.json";
+
 import {
 	changeFile,
 	emoji,
@@ -13,6 +13,10 @@ import {
 	mvFile,
 	removeComment,
 } from "./utils";
+
+const packageJson = JSON.parse(
+	readFileSync(resolve(__dirname, "../package.json"), "utf-8")
+  );
 
 const cwd = process.cwd();
 const program = new Command();

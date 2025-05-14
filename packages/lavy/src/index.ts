@@ -1,0 +1,1 @@
+import './cli'; // ✅ 执行模块代码（等价于 require）
