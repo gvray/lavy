@@ -1,42 +1,41 @@
 {
-  "name": "stylelint-config-lavy",
-  "version": "1.0.2-Alpha",
-  "description": "Stylelint config with standard and prettier.",
-  "main": "./index.js",
-  "files": [
-    "index.js"
-  ],
-  "keywords": [
-    "stylelint",
-    "stylelint-config",
-    "config-standard",
-    "prettier",
-    "lavy"
-  ],
-  "scripts": {
-    "lint": "eslint ./"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/GavinBirkhoff/lavy.git"
-  },
-  "author": {
-    "name": "GavinBirkhoff",
-    "email": "gavinbirkhoff@gmail.com"
-  },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/GavinBirkhoff/lavy/issues"
-  },
-  "homepage": "https://github.com/GavinBirkhoff/lavy#readme",
-  "engines": {
-    "node": ">=16"
-  },
-  "peerDependencies": {
-    "stylelint": "14.x"
-  },
-  "dependencies": {
-    "stylelint": "14.x",
-    "stylelint-config-standard": "^29.0.0"
-  }
+	"name": "stylelint-config-lavy",
+	"version": "1.0.2-Alpha",
+	"description": "Stylelint config with standard and prettier.",
+	"main": "./index.js",
+	"files": ["index.js"],
+	"type": "module",
+	"keywords": [
+		"stylelint",
+		"stylelint-config",
+		"config-standard",
+		"prettier",
+		"lavy"
+	],
+	"scripts": {
+		"lint": "eslint ./"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/GavinBirkhoff/lavy.git"
+	},
+	"author": {
+		"name": "GavinBirkhoff",
+		"email": "gavinbirkhoff@gmail.com"
+	},
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/GavinBirkhoff/lavy/issues"
+	},
+	"homepage": "https://github.com/GavinBirkhoff/lavy#readme",
+	"engines": {
+		"node": ">=16"
+	},
+	"peerDependencies": {
+		"stylelint": "14.x"
+	},
+	"dependencies": {
+		"stylelint": "14.x",
+		"stylelint-config-standard": "^29.0.0"
+	}
 }
