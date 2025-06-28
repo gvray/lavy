@@ -1,27 +1,27 @@
-module.exports = {
-	extends: [
-		"prettier",
-		"eslint:recommended",
-		// 'plugin:import/recommended',
-		...[
-			"./rules/prettier",
-			"./rules/base/variables",
-			"./rules/base/es6",
-			"./rules/base/strict",
-			"./rules/imports",
-		],
-	],
-	parser: "@babel/eslint-parser",
-	plugins: ["prettier"],
-	parserOptions: {
-		requireConfigFile: false,
-		ecmaVersion: 2020,
-		sourceType: "module",
-		ecmaFeatures: {
-			globalReturn: false,
-			impliedStrict: true,
-			jsx: true,
-		},
-	},
-	root: true,
+// src/index.ts
+import type {Linter} from "eslint"; // Optional typing
+import pluginTs from "@typescript-eslint/eslint-plugin";
+import parserTs from "@typescript-eslint/parser";
+
+export const recommended: Linter.Config[] = [
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    languageOptions: {
+      parser: parserTs,
+      parserOptions: {
+        project: "./tsconfig.json",
+      },
+    },
+    plugins: {},
+    rules: {
+      ...pluginTs.configs.recommended.rules, // ⬅️ 官方推荐规则
+      "@typescript-eslint/explicit-function-return-type": "warn",
+      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    },
+  },
+];
+
+// 允许 default 导出（方便引用）
+export default {
+  recommended,
 };

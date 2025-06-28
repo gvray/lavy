@@ -1,105 +1,314 @@
-import chalk from "chalk";
-import { spawn } from "cross-spawn";
-import fs from "fs-extra";
-import emoji from "./emoji";
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
+import { join, resolve } from 'node:path'
+import { execSync } from 'node:child_process'
+import { promisify } from 'node:util'
+import { glob } from 'glob'
+import semver from 'semver'
+import debug from 'debug'
 
-/**
- * 复制文件从源路径到目标路径
- * @param src 源文件路径
- * @param dest 目标文件路径
- */
-async function mvFile(src: string, dest: string): Promise<void> {
-	try {
-		const content = await fs.readFile(src);
-		await fs.ensureFile(dest);
-		await fs.writeFile(dest, content);
-	} catch (error) {
-		return Promise.reject(error);
-	}
+const log = debug('lavy:utils')
+const globPromise = promisify(glob)
+
+export const emoji = '✨'
+
+export async function installPackage(packageName: string): Promise<void> {
+  try {
+    log(`Installing package: ${packageName}`)
+    execSync(`npm install ${packageName} --save-dev`, { stdio: 'inherit' })
+  } catch (error) {
+    log(`Error installing package ${packageName}:`, error)
+    throw error
+  }
 }
 
-/**
- * 读取源文件内容，通过管道函数处理后写入目标文件
- * @param src 源文件路径
- * @param dest 目标文件路径
- * @param pipe 处理函数
- */
-async function changeFile(
-	src: string,
-	dest: string,
-	pipe: (content: string) => string,
+export async function mvFile(
+  source: string,
+  destination: string,
 ): Promise<void> {
-	try {
-		const data = await fs.readFile(src);
-		const str = pipe(data.toString());
-		await fs.writeFile(dest, str);
-	} catch (error) {
-		return Promise.reject(error);
-	}
+  try {
+    log(`Moving file from ${source} to ${destination}`)
+    const content = readFileSync(source, 'utf-8')
+    writeFileSync(destination, content, 'utf-8')
+  } catch (error) {
+    log(`Error moving file from ${source} to ${destination}:`, error)
+    throw error
+  }
 }
 
-/**
- * 安装依赖包
- * @param dependencies 依赖包列表
- */
-function installPackage(...dependencies: string[]): Promise<string[]> {
-	return new Promise((resolve, reject) => {
-		let command: string;
-		if (fs.existsSync("yarn.lock")) {
-			command = /^win/.test(process.platform) ? "yarn.cmd" : "yarn";
-		} else if (fs.existsSync("pnpm-lock.yaml")) {
-			command = /^win/.test(process.platform) ? "pnpm.cmd" : "pnpm";
-		} else {
-			command = /^win/.test(process.platform) ? "npm.cmd" : "npm";
-		}
-
-		// 根据选择的包管理器，确定使用的命令
-		let installCommand: string[];
-		if (command.includes("yarn")) {
-			installCommand = ["add", "-D"];
-		} else if (command.includes("pnpm")) {
-			if (fs.existsSync("pnpm-workspace.yaml")) {
-				installCommand = ["add", "-D", "-w"];
-			} else {
-				installCommand = ["add", "-D"];
-			}
-		} else {
-			installCommand = ["install", "-D"];
-		}
-
-		const childProcess = spawn(
-			command,
-			installCommand.concat(...dependencies),
-			{ stdio: "inherit" },
-		);
-
-		childProcess.on("close", (code: number) => {
-			if (code !== 0) {
-				console.log(
-					chalk.red("Error occurred while installing dependencies!"),
-					`with code ${code}`,
-				);
-				reject(
-					`❌ Unable to install dependencies, manually install dependencies according to the specific conditions of your project, such as npm yarn or pnpm, the next dependencies you need to see ${dependencies.toString()} 🔧`,
-				);
-				// process.exit(1)
-			} else {
-				console.log(
-					chalk.cyan(`Install finished with ${dependencies.toString()}`),
-				);
-				resolve(dependencies);
-			}
-		});
-	});
+export async function changeFile(
+  source: string,
+  destination: string,
+  transformer: (content: string) => string,
+): Promise<void> {
+  try {
+    log(`Changing file from ${source} to ${destination}`)
+    const content = readFileSync(source, 'utf-8')
+    const transformedContent = transformer(content)
+    writeFileSync(destination, transformedContent, 'utf-8')
+  } catch (error) {
+    log(`Error changing file from ${source} to ${destination}:`, error)
+    throw error
+  }
 }
 
-/**
- * 移除注释
- * @param msg 输入字符串
- * @returns 移除注释后的字符串
- */
-function removeComment(msg: string): string {
-	return msg.replace(/^#.*[\n\r]*/gm, "");
+export function removeComment(content: string): string {
+  return content.replace(/^#.*$/gm, '').trim()
 }
 
-export { mvFile, changeFile, installPackage, removeComment, emoji };
+interface DependencyCheckResult {
+  hasConflicts: boolean
+  conflicts: string[]
+}
+
+export async function checkDependencies(options: {
+  linter: string
+  language: string
+  framework: string
+  style: string
+}): Promise<DependencyCheckResult> {
+  const conflicts: string[] = []
+  const { linter, language, framework, style } = options
+
+  // 检查 Node.js 版本
+  if (!semver.gte(process.version, '18.0.0')) {
+    conflicts.push('Node.js version must be >= 18.0.0')
+  }
+
+  // 检查包管理器
+  try {
+    const packageManager = process.env.npm_execpath?.includes('yarn')
+      ? 'yarn'
+      : 'npm'
+    if (packageManager === 'yarn' && !existsSync('yarn.lock')) {
+      conflicts.push('Yarn is being used but yarn.lock is missing')
+    }
+  } catch (error) {
+    log('Error checking package manager:', error)
+  }
+
+  // 检查依赖冲突
+  if (linter === 'Biome' && framework === 'Vue') {
+    conflicts.push('Biome is not fully compatible with Vue')
+  }
+
+  if (language === 'Typescript' && !existsSync('tsconfig.json')) {
+    conflicts.push('TypeScript is selected but tsconfig.json is missing')
+  }
+
+  return {
+    hasConflicts: conflicts.length > 0,
+    conflicts,
+  }
+}
+
+interface ConfigValidationResult {
+  isValid: boolean
+  warnings: string[]
+}
+
+export async function validateConfig(
+  projectRoot: string,
+): Promise<ConfigValidationResult> {
+  const warnings: string[] = []
+
+  // 检查必要的配置文件
+  const requiredFiles = ['package.json', '.gitignore', '.editorconfig']
+
+  for (const file of requiredFiles) {
+    if (!existsSync(join(projectRoot, file))) {
+      warnings.push(`Missing required file: ${file}`)
+    }
+  }
+
+  // 检查 package.json
+  try {
+    const packageJson = JSON.parse(
+      readFileSync(join(projectRoot, 'package.json'), 'utf-8'),
+    )
+
+    if (!packageJson.scripts) {
+      warnings.push('Missing scripts in package.json')
+    }
+
+    if (!packageJson.dependencies && !packageJson.devDependencies) {
+      warnings.push('No dependencies found in package.json')
+    }
+  } catch (error) {
+    log('Error reading package.json:', error)
+    warnings.push('Error reading package.json')
+  }
+
+  return {
+    isValid: warnings.length === 0,
+    warnings,
+  }
+}
+
+interface ProjectHealthResult {
+  isHealthy: boolean
+  warnings: string[]
+}
+
+export async function checkProjectHealth(
+  projectRoot: string,
+  fix = false,
+): Promise<ProjectHealthResult> {
+  const warnings: string[] = []
+
+  // 检查项目结构
+  const requiredDirs = ['src', 'tests']
+  for (const dir of requiredDirs) {
+    if (!existsSync(join(projectRoot, dir))) {
+      warnings.push(`Missing required directory: ${dir}`)
+    }
+  }
+
+  // 检查代码质量
+  try {
+    const files = (await globPromise('**/*.{js,ts,jsx,tsx}', {
+      cwd: projectRoot,
+      ignore: ['**/node_modules/**', '**/dist/**'],
+    })) as string[]
+
+    for (const file of files) {
+      const content = readFileSync(join(projectRoot, file), 'utf-8')
+      if (content.includes('console.log')) {
+        warnings.push(`Found console.log in ${file}`)
+      }
+      if (content.includes('debugger')) {
+        warnings.push(`Found debugger statement in ${file}`)
+      }
+    }
+  } catch (error) {
+    log('Error checking code quality:', error)
+    warnings.push('Error checking code quality')
+  }
+
+  // 检查 Git 配置
+  if (!existsSync(join(projectRoot, '.git'))) {
+    warnings.push('Git repository not initialized')
+  }
+
+  return {
+    isHealthy: warnings.length === 0,
+    warnings,
+  }
+}
+
+interface GenerateConfigOptions {
+  language?: string
+  framework?: string
+  style?: string
+  linter?: string
+  platform?: string
+}
+
+export async function generateConfig(
+  type: string,
+  options: GenerateConfigOptions = {},
+): Promise<void> {
+  const { language, framework, style, linter, platform } = options
+  const templateDir = resolve(__dirname, '../template')
+
+  switch (type) {
+    case 'biome':
+      await mvFile(
+        join(templateDir, 'biome.tpl'),
+        join(process.cwd(), 'biome.json'),
+      )
+      break
+
+    case 'eslint':
+      await changeFile(
+        join(templateDir, 'eslint.tpl'),
+        join(process.cwd(), '.eslintrc.js'),
+        (str: string) => {
+          const getLavy = (): string => {
+            const pathName: string[] = []
+            if (language !== 'Javascript') {
+              pathName.push(language?.toLowerCase() || '')
+            }
+            if (framework !== 'None') {
+              pathName.push(framework?.toLowerCase() || '')
+            }
+            return pathName.length > 0 ? `/${pathName.join('/')}` : ''
+          }
+          return str.replace('{{ eslintPath }}', `'lavy${getLavy()}'`)
+        },
+      )
+      break
+
+    case 'prettier':
+      await mvFile(
+        join(templateDir, 'prettierrc.tpl'),
+        join(process.cwd(), '.prettierrc.js'),
+      )
+      break
+
+    case 'editorconfig':
+      await mvFile(
+        join(templateDir, 'editorconfig.tpl'),
+        join(process.cwd(), '.editorconfig'),
+      )
+      break
+
+    case 'gitignore':
+      await mvFile(
+        join(templateDir, 'gitignore.tpl'),
+        join(process.cwd(), '.gitignore'),
+      )
+      break
+
+    case 'typescript':
+      await mvFile(
+        join(templateDir, 'tsconfig.tpl'),
+        join(process.cwd(), 'tsconfig.json'),
+      )
+      break
+
+    case 'stylelint':
+      await changeFile(
+        join(templateDir, 'stylelint.tpl'),
+        join(process.cwd(), '.stylelintrc.js'),
+        (str: string) =>
+          str.replace('{{ stylelintPath }}', `'stylelint-config-lavy'`),
+      )
+      break
+
+    case 'vscode':
+      await mvFile(
+        join(templateDir, 'extensions.tpl'),
+        join(process.cwd(), '.vscode', 'extensions.json'),
+      )
+      await mvFile(
+        join(templateDir, 'settings.tpl'),
+        join(process.cwd(), '.vscode', 'settings.json'),
+      )
+      break
+
+    case 'ci':
+      if (platform === 'GitHub Actions') {
+        await mvFile(
+          join(templateDir, 'github-actions.tpl'),
+          join(process.cwd(), '.github', 'workflows', 'ci.yml'),
+        )
+      } else if (platform === 'GitLab CI') {
+        await mvFile(
+          join(templateDir, 'gitlab-ci.tpl'),
+          join(process.cwd(), '.gitlab-ci.yml'),
+        )
+      }
+      break
+
+    default:
+      throw new Error(`Unknown config type: ${type}`)
+  }
+}
+
+// 导出提交验证器
+export {
+  commitValidator,
+  CommitValidator,
+  type CommitRule,
+  type ValidationResult,
+} from './commit-validator.js'

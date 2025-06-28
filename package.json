@@ -31,10 +31,15 @@
 		"@biomejs/biome": "1.9.4",
 		"@types/node": "^18.15.11",
 		"copyfiles": "^2.4.1",
+		"cpy": "^11.1.0",
+		"cpy-cli": "^5.0.0",
 		"cross-env": "^7.0.3",
 		"mocha": "^10.2.0",
 		"np": "^7.7.0",
 		"rimraf": "^3.0.2",
+		"ts-node": "^10.9.2",
+		"tsup": "^8.5.0",
+		"tsx": "^4.20.3",
 		"typescript": "~5.0.3"
 	}
 }

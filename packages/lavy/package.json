@@ -1,25 +1,45 @@
 {
 	"name": "lavy",
-	"version": "1.1.0",
-	"description": "Codelint cli that escort for our code programming.",
-	"main": "./index.js",
-	"files": ["template/", "utils", "cli.js", "index.js", "tsconfig.base.json"],
+	"version": "2.0.0",
+	"description": "Enterprise-level code quality and project configuration management tool",
+	"main": "./dist/index.mjs",
+	"module": "./dist/index.mjs",
+	"exports": {
+		"import": "./dist/index.mjs",
+		"require": "./dist/index.mjs"
+	},
+	"files": [
+		"dist/",
+		"template/",
+		"utils",
+		"tsconfig.base.json"
+	],
 	"type": "module",
 	"keywords": [
 		"eslint",
 		"stylelint",
 		"prettier",
+		"biome",
 		"prettierconfig",
 		"editorconfig",
 		"tsconfig",
 		"auto-format",
 		"vscode-settings",
-		"lint-cli"
+		"lint-cli",
+		"code-quality",
+		"project-configuration"
 	],
 	"scripts": {
-		"lint": "eslint ./",
-		"test": "mocha ./__test__/*.test.js --timeout 5000",
-		"prepublishOnly": "npm run test"
+		"start": "tsx src/index.ts",
+		"build": "tsup",
+		"dev": "tsup --watch",
+		"clean": "rimraf dist",
+		"lint": "biome lint ./",
+		"format": "biome format --write ./",
+		"test": "vitest run",
+		"test:watch": "vitest",
+		"test:coverage": "vitest run --coverage",
+		"prepublishOnly": "npm run build && npm run test"
 	},
 	"repository": {
 		"type": "git",
@@ -34,30 +54,53 @@
 		"url": "https://github.com/GavinBirkhoff/lavy/issues"
 	},
 	"bin": {
-		"lavy": "./cli.js"
+		"lavy": "dist/index.mjs"
 	},
 	"homepage": "https://github.com/GavinBirkhoff/lavy#readme",
 	"engines": {
-		"node": ">=16"
+		"node": ">=18"
 	},
 	"peerDependencies": {
-		"eslint": "^7.32.0",
-		"stylelint": "14.x"
+		"eslint": "^9.0.0",
+		"stylelint": "^16.0.0"
 	},
 	"dependencies": {
-		"chalk": "^4.1.2",
-		"commander": "^10.0.0",
+		"@biomejs/biome": "^1.5.3",
+		"@types/debug": "^4.1.12",
+		"@types/glob": "^8.1.0",
+		"@types/semver": "^7.5.6",
+		"boxen": "^8.0.1",
+		"cac": "^6.7.14",
+		"cfonts": "^3.3.0",
+		"chalk": "^5.3.0",
+		"colorette": "^2.0.20",
+		"commander": "^11.1.0",
 		"cross-spawn": "^7.0.3",
-		"eslint": "^7.32.0",
-		"fs-extra": "^11.1.1",
-		"inquirer": "^8.2.5",
-		"prettier": "^2.8.7",
-		"stylelint": "14.x",
-		"typescript": "~5.0.3"
+		"debug": "^4.3.4",
+		"eslint": "^9.0.0",
+		"execa": "^8.0.1",
+		"fs-extra": "^11.2.0",
+		"glob": "^10.3.10",
+		"inquirer": "^9.2.12",
+		"ora": "^8.2.0",
+		"prettier": "^3.2.5",
+		"prompts": "^2.4.2",
+		"semver": "^7.5.4",
+		"stylelint": "^16.0.0",
+		"typescript": "~5.3.3",
+		"update-notifier": "^7.3.1"
 	},
 	"devDependencies": {
 		"@types/cross-spawn": "^6.0.6",
 		"@types/fs-extra": "^11.0.4",
-		"@types/inquirer": "^9.0.8"
+		"@types/inquirer": "^9.0.7",
+		"@types/node": "^20.11.19",
+		"@types/prompts": "^2.4.9",
+		"@typescript-eslint/eslint-plugin": "^7.0.1",
+		"@typescript-eslint/parser": "^7.0.1",
+		"@vitest/coverage-v8": "^1.2.2",
+		"eslint-config-prettier": "^9.1.0",
+		"eslint-plugin-vitest": "^0.3.20",
+		"vitest": "^1.2.2"
 	}
 }
