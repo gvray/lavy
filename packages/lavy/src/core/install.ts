@@ -22,11 +22,16 @@ export async function installDeps({
   devDeps.push('prettier')
 
   // 语言相关依赖
+  if (language === 'js' || language === 'ts') {
+    devDeps.push('globals', 'eslint-plugin-import')
+  }
+
   if (language === 'ts') {
     devDeps.push(
       'typescript',
       '@typescript-eslint/parser',
       '@typescript-eslint/eslint-plugin',
+      'eslint-import-resolver-typescript',
     )
   }
 
