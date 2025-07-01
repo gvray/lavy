@@ -1,14 +1,26 @@
 {
-	"extends": "../../tsconfig.base.json",
-	"include": ["**/*.ts"],
 	"compilerOptions": {
-		"tsBuildInfoFile": "./node_modules/.tmp/eslint-config-lavy/tsconfig.node.tsbuildinfo",
-		"resolveJsonModule": true, // ✅ 允许导入 JSON 文件
-		"esModuleInterop": true, // ✅ 配合使用，支持 default 导出
-		"module": "esnext", // 或 "commonjs" 也可以
-		"moduleResolution": "node", // 确保模块解析方式正确
-		"noEmitOnError": false, // ✅ 即使有类型错误，也继续输出编译结果
-		"outDir": "./dist",
-		"declaration": true
-	}
+		"target": "ES2022",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"allowImportingTsExtensions": true,
+		"isolatedModules": true,
+		"noEmit": true,
+		"strict": true,
+		"skipLibCheck": true,
+		"esModuleInterop": true,
+		"allowSyntheticDefaultImports": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"declaration": true,
+		"declarationMap": true,
+		"sourceMap": true
+	},
+	"include": [
+		"src/**/*"
+	],
+	"exclude": [
+		"node_modules",
+		"dist"
+	]
 }

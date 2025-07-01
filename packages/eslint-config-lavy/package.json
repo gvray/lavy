@@ -1,19 +1,54 @@
 {
 	"name": "eslint-config-lavy",
-	"version": "1.0.2-Alpha.1",
-	"description": "Eslint config with typescript, react, vue, and prettier.",
-	"main": "./index.js",
+	"version": "1.0.0",
+	"description": "ESLint 9 flat config with TypeScript, React, Vue support",
+	"main": "./dist/index.js",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/index.mjs",
+			"require": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		},
+		"./js": {
+			"import": "./dist/js.mjs",
+			"require": "./dist/js.js",
+			"types": "./dist/js.d.ts"
+		},
+		"./ts": {
+			"import": "./dist/ts.mjs",
+			"require": "./dist/ts.js",
+			"types": "./dist/ts.d.ts"
+		},
+		"./jsx": {
+			"import": "./dist/jsx.mjs",
+			"require": "./dist/jsx.js",
+			"types": "./dist/jsx.d.ts"
+		},
+		"./tsx": {
+			"import": "./dist/tsx.mjs",
+			"require": "./dist/tsx.js",
+			"types": "./dist/tsx.d.ts"
+		},
+		"./vue": {
+			"import": "./dist/vue.mjs",
+			"require": "./dist/vue.js",
+			"types": "./dist/vue.d.ts"
+		},
+		"./vuets": {
+			"import": "./dist/vuets.mjs",
+			"require": "./dist/vuets.js",
+			"types": "./dist/vuets.d.ts"
+		}
+	},
 	"files": [
-		"rules",
-		"typescript",
-		"utils",
-		"index.js",
-		"react.js",
-		"vue.js"
+		"dist"
 	],
 	"keywords": [
 		"eslint",
 		"eslintconfig",
+		"flat-config",
 		"lavy",
 		"typescript",
 		"react",
@@ -21,44 +56,64 @@
 	],
 	"type": "module",
 	"scripts": {
-		"print-config": "eslint --print-config ./index.ts > ./print-config.json",
 		"build": "tsup",
 		"watch": "tsup --watch",
 		"clean": "rm -rf dist"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/GavinBirkhoff/lavy.git"
+		"url": "git+https://github.com/gvray/lavy.git"
 	},
 	"author": {
-		"name": "GavinBirkhoff",
-		"email": "gavinbirkhoff@gmail.com"
+		"name": "Gavin Ray",
+		"email": "gavinraydev@gmail.com"
 	},
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/GavinBirkhoff/lavy/issues"
+		"url": "https://github.com/gvray/lavy/issues"
 	},
-	"homepage": "https://github.com/GavinBirkhoff/lavy#readme",
+	"homepage": "https://github.com/gvray/lavy#readme",
 	"engines": {
-		"node": ">=16"
+		"node": ">=18"
+	},
+	"peerDependencies": {
+		"eslint": "^9.0.0"
+	},
+	"peerDependenciesMeta": {
+		"@typescript-eslint/eslint-plugin": {
+			"optional": true
+		},
+		"@typescript-eslint/parser": {
+			"optional": true
+		},
+		"eslint-plugin-react": {
+			"optional": true
+		},
+		"eslint-plugin-react-hooks": {
+			"optional": true
+		},
+		"eslint-plugin-vue": {
+			"optional": true
+		}
 	},
 	"dependencies": {
-		"@babel/core": "^7.21.8",
-		"@babel/eslint-parser": "^7.21.8",
-		"@babel/preset-react": "^7.18.6",
-		"@typescript-eslint/eslint-plugin": "^5.57.0",
-		"@typescript-eslint/parser": "^5.57.0",
-		"eslint": "^9.26.0",
-		"eslint-config-prettier": "^8.8.0",
-		"eslint-import-resolver-typescript": "^3.5.5",
-		"eslint-plugin-import": "^2.27.5",
-		"eslint-plugin-jsx-a11y": "^6.7.1",
-		"eslint-plugin-jsx-plus": "^0.1.0",
-		"eslint-plugin-prettier": "^4.2.1",
-		"eslint-plugin-react": "^7.32.2",
+		"@eslint/js": "^9.0.0"
+	},
+	"optionalDependencies": {
+		"@typescript-eslint/eslint-plugin": "^7.0.0",
+		"@typescript-eslint/parser": "^7.0.0",
+		"eslint-plugin-react": "^7.34.0",
 		"eslint-plugin-react-hooks": "^4.6.0",
-		"eslint-plugin-vue": "^9.12.0",
-		"prettier": "^2.8.7",
-		"typescript": "~5.0.3"
+		"eslint-plugin-vue": "^9.20.0"
+	},
+	"devDependencies": {
+		"eslint": "^9.0.0",
+		"@typescript-eslint/eslint-plugin": "^7.0.0",
+		"@typescript-eslint/parser": "^7.0.0",
+		"eslint-plugin-react": "^7.34.0",
+		"eslint-plugin-react-hooks": "^4.6.0",
+		"eslint-plugin-vue": "^9.20.0",
+		"typescript": "^5.0.0",
+		"tsup": "^8.0.0"
 	}
 }
