@@ -55,8 +55,8 @@ export async function runInit() {
   // 生成模板
   await generateTemplate(answers)
 
-  // 安装依赖
-  await installDeps(answers)
+  // 安装依赖 临时注释方法我快速测试
+  // await installDeps(answers)
 
   // 只有在启用 commitlint 时才配置 Git hooks
   if (answers.useCommitLint === true) {
