@@ -21,49 +21,57 @@ export function getPackageJsonType(
   }
 }
 
-export async function generateEslintConfigString(
-  baseConfig: any,
-  frameworkConfig: any,
-  typescriptConfig: any,
-  moduleType: 'esm' | 'cjs',
-): Promise<string> {
+export async function generateEslintConfigString({
+  language,
+  framework,
+  style,
+  moduleType,
+}: {
+  language: 'js' | 'ts'
+  framework: 'none' | 'react' | 'vue' | 'svelte' | 'solid'
+  style: 'none' | 'css' | 'scss' | 'sass' | 'less' | 'stylus'
+  moduleType: 'esm' | 'cjs'
+}): Promise<string> {
   // 读取模板文件
   const __dirname = fileURLToPath(new URL('.', import.meta.url))
   const templatePath = join(__dirname, './templates/eslint.config.tpl.txt')
   const template = await readFile(templatePath, 'utf-8')
 
-  // 准备模板数据
-  const templateData = {
-    typescript: !!typescriptConfig,
-    react: frameworkConfig?.framework === 'react',
-    vue: frameworkConfig?.framework === 'vue',
+  const getConfigType = (): string => {
+    if (framework === 'react') {
+      return language === 'ts' ? 'tsx' : 'jsx'
+    }
+    if (framework === 'vue') {
+      return language === 'ts' ? 'vuets' : 'vue'
+    }
+    return language === 'ts' ? 'ts' : 'js'
   }
+
+  const configType = getConfigType()
 
   // 简单的模板渲染（替换条件块）
   let result = template
 
-  // 处理 {{#if typescript}} 块
-  if (templateData.typescript) {
-    result = result.replace(
-      /\{\{#if typescript\}\}([\s\S]*?)\{\{\/if\}\}/g,
-      '$1',
-    )
-  } else {
-    result = result.replace(/\{\{#if typescript\}\}[\s\S]*?\{\{\/if\}\}/g, '')
-  }
-
-  // 处理 {{#if react}} 块
-  if (templateData.react) {
-    result = result.replace(/\{\{#if react\}\}([\s\S]*?)\{\{\/if\}\}/g, '$1')
-  } else {
-    result = result.replace(/\{\{#if react\}\}[\s\S]*?\{\{\/if\}\}/g, '')
-  }
-
-  // 处理 {{#if vue}} 块
-  if (templateData.vue) {
-    result = result.replace(/\{\{#if vue\}\}([\s\S]*?)\{\{\/if\}\}/g, '$1')
-  } else {
-    result = result.replace(/\{\{#if vue\}\}[\s\S]*?\{\{\/if\}\}/g, '')
+  // 处理所有条件块
+  const conditions = ['js', 'ts', 'jsx', 'tsx', 'vue', 'vuets']
+  for (const condition of conditions) {
+    if (configType === condition) {
+      result = result.replace(
+        new RegExp(
+          `\\{\\{#if ${condition}\\}\\}([\\s\\S]*?)\\{\\{\/if\\}\\}`,
+          'g',
+        ),
+        '$1',
+      )
+    } else {
+      result = result.replace(
+        new RegExp(
+          `\\{\\{#if ${condition}\\}\\}[\\s\\S]*?\\{\\{\\/if\\}\\}`,
+          'g',
+        ),
+        '',
+      )
+    }
   }
 
   // 如果是 CJS 格式，需要转换 import/export 语法
@@ -74,28 +82,17 @@ export async function generateEslintConfigString(
         "const { defineConfig } = require('eslint/config')",
       )
       .replace(
-        /import js from '@eslint\/js'/g,
-        "const js = require('@eslint/js')",
+        /import globals from 'globals'/g,
+        "const globals = require('globals')",
       )
       .replace(
-        /import ts from '@typescript-eslint\/eslint-plugin'/g,
-        "const ts = require('@typescript-eslint/eslint-plugin')",
-      )
-      .replace(
-        /import tsParser from '@typescript-eslint\/parser'/g,
-        "const tsParser = require('@typescript-eslint/parser')",
-      )
-      .replace(
-        /import react from 'eslint-plugin-react'/g,
-        "const react = require('eslint-plugin-react')",
-      )
-      .replace(
-        /import reactHooks from 'eslint-plugin-react-hooks'/g,
-        "const reactHooks = require('eslint-plugin-react-hooks')",
-      )
-      .replace(
-        /import vue from 'eslint-plugin-vue'/g,
-        "const vue = require('eslint-plugin-vue')",
+        /import lavyConfig from 'eslint-config-lavy\/[^']*'/g,
+        (match) => {
+          return match.replace(
+            /import lavyConfig from 'eslint-config-lavy\/([^']*)'/g,
+            "const lavyConfig = require('eslint-config-lavy/$1')",
+          )
+        },
       )
       .replace(
         /export default defineConfig\(/g,

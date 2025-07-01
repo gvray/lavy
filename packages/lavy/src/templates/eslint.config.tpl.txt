@@ -1,32 +1,28 @@
 import { defineConfig } from 'eslint/config'
-import js from '@eslint/js'
 import globals from 'globals'
-{{#if typescript}}
-import ts from '@typescript-eslint/eslint-plugin'
-import tsParser from '@typescript-eslint/parser'
+{{#if js}}
+import lavyConfig from 'eslint-config-lavy/js'
 {{/if}}
-{{#if react}}
-import react from 'eslint-plugin-react'
-import reactHooks from 'eslint-plugin-react-hooks'
+{{#if ts}}
+import lavyConfig from 'eslint-config-lavy/ts'
+{{/if}}
+{{#if jsx}}
+import lavyConfig from 'eslint-config-lavy/jsx'
+{{/if}}
+{{#if tsx}}
+import lavyConfig from 'eslint-config-lavy/tsx'
 {{/if}}
 {{#if vue}}
-import vue from 'eslint-plugin-vue'
+import lavyConfig from 'eslint-config-lavy/vue'
+{{/if}}
+{{#if vuets}}
+import lavyConfig from 'eslint-config-lavy/vuets'
 {{/if}}
 
 export default defineConfig([
-  {
-    ignores: [
-      'node_modules/**',
-      'dist/**',
-      'build/**',
-      'coverage/**',
-      '*.config.js',
-      '*.config.ts'
-    ]
-  },
+  ...lavyConfig,
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
-    ...js.configs.recommended,
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
@@ -36,72 +32,7 @@ export default defineConfig([
       }
     },
     rules: {
-      'no-console': 'warn',
-      'no-debugger': 'error',
-      'no-unused-vars': 'error',
-      'no-undef': 'error',
-      'no-redeclare': 'error',
-      'no-var': 'error',
-      'prefer-const': 'error',
-      'eqeqeq': ['error', 'always'],
-      'curly': ['error', 'all'],
-      'no-eval': 'error',
-      'indent': ['error', 2, { SwitchCase: 1 }],
-      'quotes': ['error', 'single', { avoidEscape: true }],
-      'semi': ['error', 'never'],
-      'comma-dangle': ['error', 'never'],
-      'no-trailing-spaces': 'error',
-      'eol-last': 'error'
+      // 你可以在这里添加项目特定的规则
     }
-  }{{#if typescript}},
-  {
-    files: ['**/*.{ts,tsx}'],
-    languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        ecmaVersion: 2022,
-        sourceType: 'module',
-        project: './tsconfig.json'
-      }
-    },
-    plugins: {
-      '@typescript-eslint': ts
-    },
-    rules: {
-      ...ts.configs.recommended.rules,
-      '@typescript-eslint/no-unused-vars': 'error',
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/explicit-module-boundary-types': 'off'
-    }
-  }{{/if}}{{#if react}},
-  {
-    files: ['**/*.{jsx,tsx}'],
-    plugins: {
-      react,
-      'react-hooks': reactHooks
-    },
-    ...react.configs.recommended,
-    ...react.configs['jsx-runtime'],
-    rules: {
-      'react/prop-types': 'off',
-      'react/react-in-jsx-scope': 'off',
-      'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn'
-    }
-  }{{/if}}{{#if vue}},
-  {
-    files: ['**/*.vue'],
-    plugins: {
-      vue
-    },
-    ...vue.configs.recommended,
-    languageOptions: {
-      parser: vue.parser,
-      parserOptions: {
-        ecmaVersion: 2022,
-        sourceType: 'module'
-      }
-    }
-  }{{/if}}
+  }
 ])

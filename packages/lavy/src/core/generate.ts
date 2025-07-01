@@ -22,12 +22,12 @@ export async function generateTemplate(options: ConfigOptions) {
   // 写入配置文件
   await writeFile(
     'eslint.config.js',
-    await generateEslintConfigString(
-      { language },
-      { framework },
-      language === 'ts' ? {} : null,
+    await generateEslintConfigString({
+      language,
+      framework,
+      style,
       moduleType,
-    ),
+    }),
   )
   await writeFile(
     'prettier.config.js',
