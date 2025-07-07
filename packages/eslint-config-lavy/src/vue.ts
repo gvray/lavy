@@ -1,20 +1,14 @@
 import js from '@eslint/js'
 import vue from 'eslint-plugin-vue'
 import type { Linter } from 'eslint'
+import { ignores } from './ignores'
 
 export const vueConfig: Linter.Config[] = [
   {
-    ignores: [
-      'node_modules/**',
-      'dist/**',
-      'build/**',
-      'coverage/**',
-      '*.config.js',
-      '*.config.ts'
-    ]
+    ignores
   },
   {
-    files: ['**/*.{js,jsx,ts,tsx}'],
+    files: ['**/*.{js,vue}'],
     ...js.configs.recommended,
     languageOptions: {
       ecmaVersion: 2022,

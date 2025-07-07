@@ -5,14 +5,6 @@ export async function promptOptions() {
   // 检查是否为 Git 项目
   const isGitProject = await isInGitRepository()
 
-  console.log('🔍 检测项目状态...')
-  if (isGitProject) {
-    console.log('  ✅ 检测到 Git 项目')
-  } else {
-    console.log('  ⚠️  未检测到 Git 项目')
-  }
-  console.log()
-
   const questions: any[] = [
     {
       type: 'select',

@@ -23,7 +23,7 @@ export async function installDeps({
 
   // 语言相关依赖
   if (language === 'js' || language === 'ts') {
-    devDeps.push('globals', 'eslint-plugin-import')
+    devDeps.push('globals', 'eslint-config-lavy', 'eslint-plugin-import')
   }
 
   if (language === 'ts') {
@@ -56,14 +56,14 @@ export async function installDeps({
 
   // Git hooks 相关依赖（根据 useCommitLint 决定）
   if (useCommitLint) {
-    console.log('  🔧 将安装 Git hooks 相关依赖')
+    // console.log('  🔧 将安装 Git hooks 相关依赖')
     devDeps.push(
       'husky', // Git hooks 管理工具
       'lint-staged', // 暂存文件 lint 工具
       'tsx', // TypeScript 执行器
     )
   } else {
-    console.log('  ⏭️  跳过 Git hooks 相关依赖安装')
+    // console.log('  ⏭️  跳过 Git hooks 相关依赖安装')
   }
 
   const pkgManager = detectPackageManager()

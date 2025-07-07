@@ -1,19 +1,13 @@
 import js from '@eslint/js'
 import type { Linter } from 'eslint'
+import { ignores } from './ignores'
 
 export const jsConfig: Linter.Config[] = [
   {
-    ignores: [
-      'node_modules/**',
-      'dist/**',
-      'build/**',
-      'coverage/**',
-      '*.config.js',
-      '*.config.ts'
-    ]
+    ignores
   },
   {
-    files: ['**/*.{js,jsx}'],
+    files: ['**/*.js'],
     ...js.configs.recommended,
     languageOptions: {
       ecmaVersion: 2022,

@@ -3,20 +3,14 @@ import ts from '@typescript-eslint/eslint-plugin'
 import tsParser from '@typescript-eslint/parser'
 import vue from 'eslint-plugin-vue'
 import type { Linter } from 'eslint'
+import { ignores } from './ignores'
 
 export const vueTsConfig: Linter.Config[] = [
   {
-    ignores: [
-      'node_modules/**',
-      'dist/**',
-      'build/**',
-      'coverage/**',
-      '*.config.js',
-      '*.config.ts'
-    ]
+    ignores
   },
   {
-    files: ['**/*.{js,jsx,ts,tsx}'],
+    files: ['**/*.{vue,ts}'],
     ...js.configs.recommended,
     languageOptions: {
       ecmaVersion: 2022,
@@ -52,7 +46,7 @@ export const vueTsConfig: Linter.Config[] = [
     }
   },
   {
-    files: ['**/*.{ts,tsx}'],
+    files: ['**/*.ts'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -87,4 +81,4 @@ export const vueTsConfig: Linter.Config[] = [
       }
     }
   }
-] 
+]

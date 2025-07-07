@@ -2,17 +2,11 @@ import js from '@eslint/js'
 import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import type { Linter } from 'eslint'
+import { ignores } from './ignores'
 
 export const jsxConfig: Linter.Config[] = [
   {
-    ignores: [
-      'node_modules/**',
-      'dist/**',
-      'build/**',
-      'coverage/**',
-      '*.config.js',
-      '*.config.ts'
-    ]
+    ignores
   },
   {
     files: ['**/*.{js,jsx}'],
@@ -51,7 +45,7 @@ export const jsxConfig: Linter.Config[] = [
     }
   },
   {
-    files: ['**/*.{jsx,tsx}'],
+    files: ['**/*.jsx'],
     plugins: {
       react: react as any,
       'react-hooks': reactHooks as any

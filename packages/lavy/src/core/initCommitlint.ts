@@ -81,13 +81,13 @@ export async function initCommitlint({ language, framework, style }: any) {
 
     spinner.succeed('✅ Git hooks 和 lint-staged 配置完成！')
 
-    console.log('\n📋 已配置的功能：')
-    console.log('  🔍 pre-commit: 运行 lint-staged 检查暂存文件')
-    console.log('  📝 commit-msg: 使用 lavy commit 验证提交信息')
-    console.log(
-      '  🧹 lint-staged: 自动格式化暂存文件（配置在 package.json 中）',
-    )
-    console.log('  📋 lavy commit: 内置提交信息验证器')
+    // console.log('\n📋 已配置的功能：')
+    // console.log('  🔍 pre-commit: 运行 lint-staged 检查暂存文件')
+    // console.log('  📝 commit-msg: 使用 lavy commit 验证提交信息')
+    // console.log(
+    //   '  🧹 lint-staged: 自动格式化暂存文件（配置在 package.json 中）',
+    // )
+    // console.log('  📋 lavy commit: 内置提交信息验证器')
 
     if (!hasPackageJson) {
       console.log('\n⚠️  注意：')
@@ -97,19 +97,9 @@ export async function initCommitlint({ language, framework, style }: any) {
     }
 
     console.log('\n💡 使用说明：')
-    console.log('  • 提交前会自动运行代码检查和格式化')
-    console.log('  • 提交信息会通过 lavy commit 验证')
     console.log(
-      '  • 支持的类型: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert',
+      '  • 选择运行 "lavy commit --init" 将提交验证信息暴露到 lavy.config.js',
     )
-    console.log('  • 格式: <type>: <description>')
-    console.log('  • 运行 "npm run commit:check" 测试验证器')
-    console.log('  • 运行 "npm run commit:config" 查看配置')
-    console.log('\n📝 下一步：')
-    console.log(
-      '  • 运行 "lavy commit --init" 添加 commit 配置到 lavy.config.js',
-    )
-    console.log('  • 运行 "lavy commit --config" 查看当前配置')
   } catch (error) {
     spinner.fail('❌ Git hooks 配置失败！')
     console.error('错误详情:', error)

@@ -24,21 +24,17 @@ export async function runInit() {
       console.log(`  - ${conflict}`)
     }
 
-    console.log('\n建议操作:')
-    console.log('  1. 手动删除旧配置文件')
-    console.log('  2. 使用 --force 参数强制覆盖')
-    console.log('  3. 手动合并配置内容')
-
     const { action } = await prompts([
       {
         type: 'select',
         name: 'action',
         message: '请选择操作:',
         choices: [
+          { title: '强制覆盖旧配置（推荐 ✅）', value: 'force' }, // 推荐项
           { title: '继续初始化（保留旧配置）', value: 'continue' },
-          { title: '强制覆盖旧配置', value: 'force' },
           { title: '终止操作', value: 'abort' },
         ],
+        initial: 0, // 默认选中第 1 项（推荐项）
       },
     ])
 
@@ -56,7 +52,7 @@ export async function runInit() {
   await generateTemplate(answers)
 
   // 安装依赖 临时注释方法我快速测试
-  // await installDeps(answers)
+  await installDeps(answers)
 
   // 只有在启用 commitlint 时才配置 Git hooks
   if (answers.useCommitLint === true) {
@@ -101,5 +97,4 @@ export default defineConfig(${JSON.stringify(config, null, 2)})
 
   console.log('✅ 初始化完成')
   console.log('📁 配置文件: lavy.config.js')
-  console.log('💡 使用 defineConfig 获得完整的类型提示')
 }
