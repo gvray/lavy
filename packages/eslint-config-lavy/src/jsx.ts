@@ -60,3 +60,9 @@ export const jsxConfig: Linter.Config[] = [
     }
   }
 ] 
+
+export default jsxConfig
+
+if (typeof module !== 'undefined') {
+  module.exports = jsxConfig
+}

@@ -82,3 +82,9 @@ export const vueTsConfig: Linter.Config[] = [
     }
   }
 ]
+
+export default vueTsConfig
+
+if (typeof module !== 'undefined') {
+  module.exports = vueTsConfig
+}

@@ -1,9 +1,19 @@
 {
 	"name": "stylelint-config-lavy",
-	"version": "1.0.2-Alpha",
+	"version": "1.0.0",
 	"description": "Stylelint config with standard and prettier.",
-	"main": "./index.js",
-	"files": ["index.js"],
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.mjs",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/index.mjs",
+			"require": "./dist/index.cjs"
+		}
+	},
+	"files": [
+		"dist"
+	],
 	"type": "module",
 	"keywords": [
 		"stylelint",
@@ -13,21 +23,23 @@
 		"lavy"
 	],
 	"scripts": {
-		"lint": "eslint ./"
+		"build": "tsup",
+		"dev": "tsup --watch",
+		"clean": "rimraf dist"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/GavinBirkhoff/lavy.git"
+		"url": "git+https://github.com/gvray/lavy.git"
 	},
 	"author": {
-		"name": "GavinBirkhoff",
-		"email": "gavinbirkhoff@gmail.com"
+		"name": "Gavin Ray",
+		"email": "gavinraydev@gmail.com"
 	},
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/GavinBirkhoff/lavy/issues"
+		"url": "https://github.com/gvray/lavy/issues"
 	},
-	"homepage": "https://github.com/GavinBirkhoff/lavy#readme",
+	"homepage": "https://github.com/gvray/lavy#readme",
 	"engines": {
 		"node": ">=16"
 	},

@@ -46,3 +46,9 @@ export const tsxConfig: Linter.Config[] = [
     }
   }
 ] 
+
+export default tsxConfig
+
+if (typeof module !== 'undefined') {
+  module.exports = tsxConfig
+}

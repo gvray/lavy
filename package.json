@@ -10,23 +10,23 @@
 		"lint": "biome lint .",
 		"fix": "biome check --write .",
 		"ci": "biome ci .",
-		"build": "tsc --build",
-		"build:watch": "tsc --build --watch",
-		"clean": "tsc --build --clean"
+		"build": "pnpm -r build",
+		"dev": "pnpm -r dev",
+		"clean": "pnpm -r clean"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/GavinBirkhoff/lavy.git"
+		"url": "git+https://github.com/gvray/lavy.git"
 	},
 	"author": {
-		"name": "GavinBirkhoff",
-		"email": "gavinbirkhoff@gmail.com"
+		"name": "Gavin Ray",
+		"email": "gavinraydev@gmail.com"
 	},
 	"license": "MIT",
 	"bugs": {
-		"url": "https://github.com/GavinBirkhoff/lavy/issues"
+		"url": "https://github.com/gvray/lavy/issues"
 	},
-	"homepage": "https://github.com/GavinBirkhoff/lavy#readme",
+	"homepage": "https://github.com/gvray/lavy#readme",
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@types/node": "^18.15.11",

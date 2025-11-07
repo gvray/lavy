@@ -1,3 +1,5 @@
+import path from 'node:path';
+import fs from 'node:fs';
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
@@ -10,10 +12,11 @@ export default defineConfig({
     'src/vue.ts',
     'src/vuets.ts'
   ],
+  target: 'node18',
   format: ['esm', 'cjs'],
   dts: true,
   splitting: false,
-  sourcemap: true,
+  sourcemap: false,
   clean: true,
   external: [
     'eslint',
@@ -23,5 +26,5 @@ export default defineConfig({
     'eslint-plugin-react',
     'eslint-plugin-react-hooks',
     'eslint-plugin-vue'
-  ]
+  ],
 });

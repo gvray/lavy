@@ -2,44 +2,44 @@
 	"name": "eslint-config-lavy",
 	"version": "1.0.0",
 	"description": "ESLint 9 flat config with TypeScript, React, Vue support",
-	"main": "./dist/index.js",
-	"module": "./dist/index.mjs",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
-			"import": "./dist/index.mjs",
-			"require": "./dist/index.js",
-			"types": "./dist/index.d.ts"
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.cjs"
 		},
 		"./js": {
-			"import": "./dist/js.mjs",
-			"require": "./dist/js.js",
-			"types": "./dist/js.d.ts"
+			"types": "./dist/js.d.ts",
+			"import": "./dist/js.js",
+			"require": "./dist/js.cjs"
 		},
 		"./ts": {
-			"import": "./dist/ts.mjs",
-			"require": "./dist/ts.js",
-			"types": "./dist/ts.d.ts"
+			"types": "./dist/ts.d.ts",
+			"import": "./dist/ts.js",
+			"require": "./dist/ts.cjs"
 		},
 		"./jsx": {
-			"import": "./dist/jsx.mjs",
-			"require": "./dist/jsx.js",
-			"types": "./dist/jsx.d.ts"
+			"types": "./dist/jsx.d.ts",
+			"import": "./dist/jsx.js",
+			"require": "./dist/jsx.cjs"
 		},
 		"./tsx": {
-			"import": "./dist/tsx.mjs",
-			"require": "./dist/tsx.js",
-			"types": "./dist/tsx.d.ts"
+			"types": "./dist/tsx.d.ts",
+			"import": "./dist/tsx.js",
+			"require": "./dist/tsx.cjs"
 		},
 		"./vue": {
-			"import": "./dist/vue.mjs",
-			"require": "./dist/vue.js",
-			"types": "./dist/vue.d.ts"
+			"types": "./dist/vue.d.ts",
+			"import": "./dist/vue.js",
+			"require": "./dist/vue.cjs"
 		},
 		"./vuets": {
-			"import": "./dist/vuets.mjs",
-			"require": "./dist/vuets.js",
-			"types": "./dist/vuets.d.ts"
+			"types": "./dist/vuets.d.ts",
+			"import": "./dist/vuets.js",
+			"require": "./dist/vuets.cjs"
 		}
 	},
 	"files": [
@@ -57,8 +57,8 @@
 	"type": "module",
 	"scripts": {
 		"build": "tsup",
-		"watch": "tsup --watch",
-		"clean": "rm -rf dist"
+		"dev": "tsup --watch",
+		"clean": "rimraf dist"
 	},
 	"repository": {
 		"type": "git",

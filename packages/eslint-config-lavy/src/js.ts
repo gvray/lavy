@@ -43,3 +43,9 @@ export const jsConfig: Linter.Config[] = [
     }
   }
 ] 
+
+export default jsConfig
+
+if (typeof module !== 'undefined') {
+  module.exports = jsConfig
+}

@@ -29,4 +29,10 @@ export const tsConfig: Linter.Config[] = [
       '@typescript-eslint/explicit-module-boundary-types': 'off'
     }
   }
-] 
+]
+
+export default tsConfig
+
+if (typeof module !== 'undefined') {
+  module.exports = tsConfig
+}
