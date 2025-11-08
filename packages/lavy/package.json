@@ -88,7 +88,8 @@
 		"semver": "^7.5.4",
 		"stylelint": "^16.0.0",
 		"typescript": "~5.3.3",
-		"update-notifier": "^7.3.1"
+		"update-notifier": "^7.3.1",
+		"handlebars": "^4.7.8"
 	},
 	"devDependencies": {
 		"@types/cross-spawn": "^6.0.6",

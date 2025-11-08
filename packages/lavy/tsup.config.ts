@@ -38,6 +38,7 @@ export default defineConfig({
     'inquirer',
     'cfonts',
     'boxen',
+    'handlebars',
   ],
   // 确保所有依赖都被正确打包
   noExternal: ['cac', 'ora', 'colorette'],

@@ -1,0 +1,41 @@
+import { defineConfig } from 'eslint/config'
+
+{{#if js}}
+import jsConfig from 'eslint-config-lavy/js'
+{{/if}}
+{{#if ts}}
+import tsConfig from 'eslint-config-lavy/ts'
+{{/if}}
+{{#if jsx}}
+import jsxConfig from 'eslint-config-lavy/jsx'
+{{/if}}
+{{#if tsx}}
+import tsxConfig from 'eslint-config-lavy/tsx'
+{{/if}}
+{{#if vue}}
+import vueConfig from 'eslint-config-lavy/vue'
+{{/if}}
+
+export default defineConfig([
+{{#if js}}
+  ...jsConfig,
+{{/if}}
+{{#if ts}}
+  ...tsConfig,
+{{/if}}
+{{#if jsx}}
+  ...jsxConfig,
+{{/if}}
+{{#if tsx}}
+  ...tsxConfig,
+{{/if}}
+{{#if vue}}
+  ...vueConfig,
+{{/if}}
+  {
+    files: ['**/*.{js,jsx,ts,tsx,vue}'],
+    rules: {
+      // 你可以在这里添加项目特定的规则
+    }
+  }
+])

@@ -55,4 +55,4 @@ export interface LavyConfig {
 }
 
 // 导出类型，方便用户使用
-export type { CommitRule } from '../utils/commit-validator.js'
+export type { CommitRule } from '../utils/commit-validator.ts'
