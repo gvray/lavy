@@ -1,8 +1,8 @@
 import { readFileSync, existsSync } from 'node:fs'
-import { resolve } from 'node:path'
+import { resolve, join } from 'node:path'
 import { readFile } from 'node:fs/promises'
-import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import type { GenerateConfigOptions } from '../types'
 
 export function getPackageJsonType(
   cwd: string = process.cwd(),
@@ -21,58 +21,71 @@ export function getPackageJsonType(
   }
 }
 
+function resolveTemplatePath(__dirname: string, filename: string): string {
+  const candidates = [
+    join(__dirname, 'templates', filename), // 适配打包后的 dist 目录
+    join(__dirname, '../templates', filename), // 适配开发态 src/core -> src/templates
+  ]
+  for (const p of candidates) {
+    if (existsSync(p)) return p
+  }
+  // 回退：直接返回第一个候选，交由 readFile 报错便于定位
+  return candidates[0]
+}
+
 export async function generateEslintConfigString({
   language,
   framework,
   style,
   moduleType,
-}: {
-  language: 'js' | 'ts'
-  framework: 'none' | 'react' | 'vue' | 'svelte' | 'solid'
-  style: 'none' | 'css' | 'scss' | 'sass' | 'less' | 'stylus'
-  moduleType: 'esm' | 'cjs'
-}): Promise<string> {
+}: GenerateConfigOptions): Promise<string> {
   // 读取模板文件
   const __dirname = fileURLToPath(new URL('.', import.meta.url))
-  const templatePath = join(__dirname, './templates/eslint.config.tpl.txt')
+  const templatePath = resolveTemplatePath(__dirname, 'eslint.config.tpl.txt')
   const template = await readFile(templatePath, 'utf-8')
 
-  const getConfigType = (): string => {
-    if (framework === 'react') {
-      return language === 'ts' ? 'tsx' : 'jsx'
-    }
-    if (framework === 'vue') {
-      return language === 'ts' ? 'vuets' : 'vue'
-    }
-    return language === 'ts' ? 'ts' : 'js'
+  // 计算需要启用的配置块（可以同时启用多个）
+  const desiredConditions = new Set<string>()
+
+  // 基础语言配置
+  if (language === 'ts') {
+    desiredConditions.add('ts')
+  } else {
+    desiredConditions.add('js')
   }
 
-  const configType = getConfigType()
+  // 框架配置
+  if (framework === 'react') {
+    if (language === 'ts') desiredConditions.add('tsx')
+    else desiredConditions.add('jsx')
+  } else if (framework === 'vue') {
+    desiredConditions.add('vue')
+  }
+  // 其他框架（svelte/solid）暂不提供专用配置，使用基础 js/ts 配置即可
 
-  // 简单的模板渲染（替换条件块）
+  // 简单的模板渲染（替换条件块，可保留多个）
   let result = template
 
-  // 处理所有条件块
-  const conditions = ['js', 'ts', 'jsx', 'tsx', 'vue', 'vuets']
+  const conditions = ['js', 'ts', 'jsx', 'tsx', 'vue']
   for (const condition of conditions) {
-    if (configType === condition) {
-      result = result.replace(
-        new RegExp(
-          `\\{\\{#if ${condition}\\}\\}([\\s\\S]*?)\\{\\{\/if\\}\\}`,
-          'g',
-        ),
-        '$1',
-      )
+    const keepRegex = new RegExp(`\\{\\{#if\\s+${condition}\\}\\}([\\s\\S]*?)\\{\\{\\/if\\}\\}`, 'g')
+    const removeRegex = new RegExp(`\\{\\{#if\\s+${condition}\\}\\}[\\s\\S]*?\\{\\{\\/if\\}\\}`, 'g')
+
+    if (desiredConditions.has(condition)) {
+      // 保留块内容，移除包裹标签（重复替换直到无匹配）
+      while (keepRegex.test(result)) {
+        result = result.replace(keepRegex, '$1')
+      }
     } else {
-      result = result.replace(
-        new RegExp(
-          `\\{\\{#if ${condition}\\}\\}[\\s\\S]*?\\{\\{\\/if\\}\\}`,
-          'g',
-        ),
-        '',
-      )
+      // 移除整块（重复替换直到无匹配）
+      while (removeRegex.test(result)) {
+        result = result.replace(removeRegex, '')
+      }
     }
   }
+
+  // 兜底清理：移除任何残余的 Handlebars if 标签
+  result = result.replace(/\{\{#if\s+\w+\}\}/g, '').replace(/\{\{\/if\}\}/g, '')
 
   // 如果是 CJS 格式，需要转换 import/export 语法
   if (moduleType === 'cjs') {
@@ -85,14 +98,18 @@ export async function generateEslintConfigString({
         /import globals from 'globals'/g,
         "const globals = require('globals')",
       )
+      // 将 `import X from 'eslint-config-lavy/<name>'` 转换为 `const X = require('eslint-config-lavy/<name>')`
       .replace(
-        /import lavyConfig from 'eslint-config-lavy\/[^']*'/g,
-        (match) => {
-          return match.replace(
-            /import lavyConfig from 'eslint-config-lavy\/([^']*)'/g,
-            "const lavyConfig = require('eslint-config-lavy/$1')",
-          )
-        },
+        /import\s+([a-zA-Z_$][\w$]*)\s+from\s+'eslint-config-lavy\/([^']+)'/g,
+        "const $1 = require('eslint-config-lavy/$2')",
+      )
+      // 支持具名导入并转换别名 `as` 为解构重命名 `:`
+      .replace(
+        /import\s*\{([^}]*)\}\s*from\s*'eslint-config-lavy\/([^']+)'/g,
+        (match, group1, name) => {
+          const mapped = String(group1).replace(/\s+as\s+/g, ': ')
+          return `const {${mapped}} = require('eslint-config-lavy/${name}')`
+        }
       )
       .replace(
         /export default defineConfig\(/g,
@@ -109,7 +126,7 @@ export async function generatePrettierConfigString(
 ): Promise<string> {
   // 读取模板文件
   const __dirname = fileURLToPath(new URL('.', import.meta.url))
-  const templatePath = join(__dirname, './templates/prettier.config.tpl.txt')
+  const templatePath = resolveTemplatePath(__dirname, 'prettier.config.tpl.txt')
   const template = await readFile(templatePath, 'utf-8')
 
   // 如果是 CJS 格式，需要转换 export default 语法
@@ -126,7 +143,7 @@ export async function generateStylelintConfigString(
 ): Promise<string> {
   // 读取模板文件
   const __dirname = fileURLToPath(new URL('.', import.meta.url))
-  const templatePath = join(__dirname, './templates/stylelint.config.tpl.txt')
+  const templatePath = resolveTemplatePath(__dirname, 'stylelint.config.tpl.txt')
   const template = await readFile(templatePath, 'utf-8')
 
   // 如果是 CJS 格式，需要转换 export default 语法

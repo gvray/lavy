@@ -5,18 +5,26 @@ import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import type { Linter } from 'eslint'
 import { ignores } from './ignores'
+import globals from 'globals'
+import { getProjectPlatform } from './utils/platform'
 export const tsxConfig: Linter.Config[] = [
   {
     ignores
   },
   {
-    files: ['**/*.{ts,tsx}'],
+    files: ['**/*.tsx'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
         ecmaVersion: 'latest' as const,
         sourceType: 'module' as const,
         project: './tsconfig.json'
+      },
+      globals: {
+        ...(() => {
+          const platform = getProjectPlatform()
+          return platform === 'node' ? globals.node : platform === 'universal' ? { ...globals.browser, ...globals.node } : globals.browser
+        })()
       }
     },
     plugins: {

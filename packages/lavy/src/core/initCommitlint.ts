@@ -4,11 +4,12 @@ import { join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { dirname } from 'node:path'
 import ora from 'ora'
+import type { Language, Framework, Style } from '../types'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-export async function initCommitlint({ language, framework, style }: any) {
+export async function initCommitlint({ language, framework, style }: { language: Language; framework: Framework; style: Style }) {
   const spinner = ora('🔧 正在配置 Git hooks 和 lint-staged...').start()
 
   try {
@@ -143,7 +144,7 @@ async function getGitRoot(): Promise<string | null> {
 
 async function createLintStagedConfig(
   workDir: string,
-  { language, framework, style }: any,
+  { language, framework, style }: { language: Language; framework: Framework; style: Style },
   force = true,
 ) {
   const packageJsonPath = join(workDir, 'package.json')
@@ -192,15 +193,15 @@ async function createLintStagedConfig(
   }
 }
 
-function generateLintStagedConfig({ language, framework, style }: any) {
+function generateLintStagedConfig({ language, framework, style }: { language: Language; framework: Framework; style: Style }) {
   const config: Record<string, string[]> = {}
 
   // 根据语言配置
-  if (language === 'ts' || language === 'typescript') {
+  if (language === 'ts') {
     // TypeScript 项目
     config['*.{ts,tsx}'] = ['eslint --fix', 'prettier --write']
     config['*.{js,jsx}'] = ['eslint --fix', 'prettier --write']
-  } else if (language === 'js' || language === 'javascript') {
+  } else if (language === 'js') {
     // JavaScript 项目
     config['*.{js,jsx}'] = ['eslint --fix', 'prettier --write']
   }
@@ -225,8 +226,6 @@ function generateLintStagedConfig({ language, framework, style }: any) {
     config['*.less'] = ['stylelint --fix', 'prettier --write']
   } else if (style === 'stylus') {
     config['*.styl'] = ['stylelint --fix', 'prettier --write']
-  } else if (style === 'tailwind') {
-    config['*.{css,scss,less}'] = ['stylelint --fix', 'prettier --write']
   }
 
   // 通用配置（总是添加）

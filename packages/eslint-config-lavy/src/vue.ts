@@ -2,63 +2,37 @@ import js from '@eslint/js'
 import vue from 'eslint-plugin-vue'
 import type { Linter } from 'eslint'
 import { ignores } from './ignores'
+import globals from 'globals'
+import { getProjectPlatform } from './utils/platform'
+
+const platform = getProjectPlatform()
+const platformGlobals = platform === 'node'
+  ? globals.node
+  : platform === 'universal'
+    ? { ...globals.browser, ...globals.node }
+    : globals.browser
 
 export const vueConfig: Linter.Config[] = [
   {
     ignores
   },
-  {
-    files: ['**/*.{js,vue}'],
-    ...js.configs.recommended,
-    languageOptions: {
-      ecmaVersion: 2022,
-      sourceType: 'module',
-      globals: {
-        console: 'readonly',
-        process: 'readonly',
-        Buffer: 'readonly',
-        __dirname: 'readonly',
-        __filename: 'readonly',
-        global: 'readonly',
-        module: 'readonly',
-        require: 'readonly'
-      }
-    },
-    rules: {
-      'no-console': 'warn',
-      'no-debugger': 'error',
-      'no-unused-vars': 'error',
-      'no-undef': 'error',
-      'no-redeclare': 'error',
-      'no-var': 'error',
-      'prefer-const': 'error',
-      'eqeqeq': ['error', 'always'],
-      'curly': ['error', 'all'],
-      'no-eval': 'error',
-      'indent': ['error', 2, { SwitchCase: 1 }],
-      'quotes': ['error', 'single', { avoidEscape: true }],
-      'semi': ['error', 'never'],
-      'comma-dangle': ['error', 'never'],
-      'no-trailing-spaces': 'error',
-      'eol-last': 'error'
-    }
-  },
+  // Spread Vue's flat recommended configs first
+  ...vue.configs['flat/recommended'],
+  // Then add our globals and any overrides
   {
     files: ['**/*.vue'],
-    plugins: {
-      vue: vue as any
+    languageOptions: {
+      ecmaVersion: 'latest' as const,
+      sourceType: 'module' as const,
+      globals: {
+        ...platformGlobals
+      }
     },
     rules: {
-      ...vue.configs.recommended.rules
-    },
-    languageOptions: {
-      parserOptions: {
-        ecmaVersion: 'latest' as const,
-        sourceType: 'module' as const
-      }
+      'vue/multi-word-component-names': 'off'
     }
   }
-] 
+]
 
 export default vueConfig
 

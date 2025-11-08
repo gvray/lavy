@@ -9,8 +9,7 @@ export default defineConfig({
     'src/ts.ts',
     'src/jsx.ts',
     'src/tsx.ts',
-    'src/vue.ts',
-    'src/vuets.ts'
+    'src/vue.ts'
   ],
   target: 'node18',
   format: ['esm', 'cjs'],

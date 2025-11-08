@@ -3,51 +3,31 @@ import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
 import type { Linter } from 'eslint'
 import { ignores } from './ignores'
+import globals from 'globals'
+import { getProjectPlatform } from './utils/platform'
+
+const platform = getProjectPlatform()
+const platformGlobals = platform === 'node'
+  ? globals.node
+  : platform === 'universal'
+    ? { ...globals.browser, ...globals.node }
+    : globals.browser
 
 export const jsxConfig: Linter.Config[] = [
   {
     ignores
   },
   {
-    files: ['**/*.{js,jsx}'],
-    ...js.configs.recommended,
+    files: ['**/*.jsx'],
     languageOptions: {
-      ecmaVersion: 2022,
-      sourceType: 'module',
+      ecmaVersion: 'latest' as const,
+      sourceType: 'module' as const,
       globals: {
-        console: 'readonly',
-        process: 'readonly',
-        Buffer: 'readonly',
-        __dirname: 'readonly',
-        __filename: 'readonly',
-        global: 'readonly',
-        module: 'readonly',
-        require: 'readonly'
+        ...platformGlobals
       }
     },
-    rules: {
-      'no-console': 'warn',
-      'no-debugger': 'error',
-      'no-unused-vars': 'error',
-      'no-undef': 'error',
-      'no-redeclare': 'error',
-      'no-var': 'error',
-      'prefer-const': 'error',
-      'eqeqeq': ['error', 'always'],
-      'curly': ['error', 'all'],
-      'no-eval': 'error',
-      'indent': ['error', 2, { SwitchCase: 1 }],
-      'quotes': ['error', 'single', { avoidEscape: true }],
-      'semi': ['error', 'never'],
-      'comma-dangle': ['error', 'never'],
-      'no-trailing-spaces': 'error',
-      'eol-last': 'error'
-    }
-  },
-  {
-    files: ['**/*.jsx'],
     plugins: {
-      react: react as any,
+      'react': react as any,
       'react-hooks': reactHooks as any
     },
     rules: {
@@ -59,7 +39,7 @@ export const jsxConfig: Linter.Config[] = [
       'react-hooks/exhaustive-deps': 'warn'
     }
   }
-] 
+]
 
 export default jsxConfig
 

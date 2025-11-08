@@ -5,7 +5,7 @@ export async function promptOptions() {
   // 检查是否为 Git 项目
   const isGitProject = await isInGitRepository()
 
-  const questions: any[] = [
+  const questions: prompts.PromptObject[] = [
     {
       type: 'select',
       name: 'language',
@@ -13,8 +13,8 @@ export async function promptOptions() {
       choices: [
         { title: 'TypeScript', value: 'ts' },
         { title: 'JavaScript', value: 'js' },
-        { title: 'None', value: 'none' },
       ],
+      initial: 0,
     },
     {
       type: 'select',
@@ -36,6 +36,17 @@ export async function promptOptions() {
         { title: 'CSS', value: 'css' },
         { title: 'None', value: 'none' },
       ],
+    },
+    {
+      type: 'select',
+      name: 'platform',
+      message: '选择运行平台',
+      choices: [
+        { title: 'Browser', value: 'browser' },
+        { title: 'Node', value: 'node' },
+        { title: 'Universal (两者都支持)', value: 'universal' },
+      ],
+      initial: 0,
     },
   ]
 

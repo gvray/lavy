@@ -1,7 +1,7 @@
 import { promptOptions } from './prompts'
 import { installDeps } from './install'
 import { generateTemplate } from './generate'
-import { writeFile } from 'node:fs/promises'
+import { writeFile, mkdir, copyFile, unlink } from 'node:fs/promises'
 import { initCommitlint } from './initCommitlint'
 import {
   createDefaultConfig,
@@ -11,12 +11,17 @@ import {
 import { defineConfig } from '../config/index.js'
 import type { LavyConfig } from '../types/config.js'
 import prompts from 'prompts'
+import { existsSync } from 'node:fs'
+import { join } from 'node:path'
 
 export async function runInit() {
   const answers = await promptOptions()
 
   // 检查配置冲突
   const conflictInfo = detectConfigConflict()
+
+  // 生成模式（默认强制生成）
+  let generationMode: 'force' | 'merge' = 'force'
 
   if (conflictInfo.hasConflict) {
     console.log('⚠️  发现配置文件冲突:')
@@ -30,8 +35,8 @@ export async function runInit() {
         name: 'action',
         message: '请选择操作:',
         choices: [
-          { title: '强制覆盖旧配置（推荐 ✅）', value: 'force' }, // 推荐项
-          { title: '继续初始化（保留旧配置）', value: 'continue' },
+          { title: '强制覆盖（备份并清理旧配置）', value: 'force' },
+          { title: '合并配置（保留旧配置）', value: 'merge' },
           { title: '终止操作', value: 'abort' },
         ],
         initial: 0, // 默认选中第 1 项（推荐项）
@@ -44,42 +49,113 @@ export async function runInit() {
     }
 
     if (action === 'force') {
+      // 1) 备份现有配置文件
+      const backupRoot = join(process.cwd(), '.lavy-backup')
+      const timestamp = String(Date.now())
+      const backupDir = join(backupRoot, timestamp)
+      await mkdir(backupDir, { recursive: true })
+      for (const file of conflictInfo.existingFiles) {
+        try {
+          await copyFile(join(process.cwd(), file), join(backupDir, file))
+          // eslint-disable-next-line no-console
+          // console.log(`  📦 已备份: ${file}`)
+        } catch (error) {
+          // eslint-disable-next-line no-console
+          // console.warn(`  ⚠️  备份失败: ${file}`, error)
+        }
+      }
+      console.log(`  🗂️  备份目录: ${backupDir}`)
+
+      // 2) 清理旧配置文件
       await resolveConfigConflict(process.cwd(), true)
+      // 删除旧的 TypeScript 版本配置，避免重复
+      if (existsSync('lavy.config.ts')) {
+        try {
+          await unlink('lavy.config.ts')
+          console.log('  ✅ 已删除: lavy.config.ts')
+        } catch (error) {
+          console.warn('  ⚠️  删除失败: lavy.config.ts', error)
+        }
+      }
+      generationMode = 'force'
+    }
+
+    if (action === 'merge') {
+      generationMode = 'merge'
+      console.log('🔀 合并模式：保留旧配置文件，仅生成缺失的标准配置文件。')
+
+      // 在合并模式下，如果样式选择为 none，则清理 Stylelint 配置
+      if (answers.style === 'none') {
+        const stylelintFiles = [
+          'stylelint.config.js',
+          'stylelint.config.cjs',
+          '.stylelintrc',
+          '.stylelintrc.js',
+          '.stylelintrc.cjs',
+          '.stylelintrc.json',
+          '.stylelintrc.yaml',
+          '.stylelintrc.yml',
+        ]
+        for (const f of stylelintFiles) {
+          if (existsSync(f)) {
+            try {
+              await unlink(f)
+              console.log(`  🗑️  合并模式清理 Stylelint 配置文件: ${f}`)
+            } catch (error) {
+              console.warn(`  ⚠️  清理失败: ${f}`, error)
+            }
+          }
+        }
+      }
     }
   }
 
-  // 生成模板
-  await generateTemplate(answers)
+  // 生成模板（根据模式控制是否覆盖）
+  await generateTemplate({
+    language: answers.language,
+    framework: answers.framework,
+    style: answers.style,
+    mode: generationMode,
+  })
 
   // 安装依赖 临时注释方法我快速测试
-  await installDeps(answers)
+  await installDeps({
+    language: answers.language,
+    framework: answers.framework,
+    style: answers.style,
+    useCommitLint: answers.useCommitLint,
+  })
 
   // 只有在启用 commitlint 时才配置 Git hooks
   if (answers.useCommitLint === true) {
-    await initCommitlint(answers)
+    await initCommitlint({
+      language: answers.language,
+      framework: answers.framework,
+      style: answers.style,
+    })
   }
 
-  // 创建 lavy.config.js 配置文件
+  // 创建 lavy.config.js 配置文件（合并模式下如果已存在则保留旧配置）
   const config: LavyConfig = {
     project: {
-      language: answers.language === 'ts' ? 'ts' : 'js',
-      framework: answers.framework === 'none' ? 'none' : answers.framework,
-      style: answers.style === 'none' ? 'none' : answers.style,
+      language: answers.language,
+      framework: answers.framework,
+      style: answers.style,
       linter: 'eslint', // 默认使用 eslint
-      platform: 'browser',
+      platform: answers.platform ?? 'browser',
     },
     lint: {
       eslint: {
         enabled: true,
-        config: '.eslintrc.js',
+        config: 'eslint.config.js',
       },
       stylelint: {
         enabled: answers.style !== 'none',
-        config: '.stylelintrc.js',
+        config: 'stylelint.config.js',
       },
       prettier: {
         enabled: true,
-        config: '.prettierrc.js',
+        config: 'prettier.config.js',
       },
       biome: {
         enabled: false,
@@ -93,7 +169,11 @@ export async function runInit() {
 export default defineConfig(${JSON.stringify(config, null, 2)})
 `
 
-  await writeFile('lavy.config.js', configContent, 'utf-8')
+  if (generationMode === 'merge' && existsSync('lavy.config.js')) {
+    console.log('ℹ️  检测到已有 lavy.config.js，合并模式下保留旧配置文件。')
+  } else {
+    await writeFile('lavy.config.js', configContent, 'utf-8')
+  }
 
   console.log('✅ 初始化完成')
   console.log('📁 配置文件: lavy.config.js')

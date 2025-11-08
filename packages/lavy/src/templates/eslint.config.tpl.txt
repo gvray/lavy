@@ -1,19 +1,19 @@
 import { defineConfig } from 'eslint/config'
 import globals from 'globals'
-{{#if js}}import lavyConfig from 'eslint-config-lavy/js'{{/if}}{{#if ts}}import lavyConfig from'eslint-config-lavy/ts'{{/if}}{{#if jsx}}import lavyConfig from 'eslint-config-lavy/jsx'{{/if}}{{#if tsx}}import lavyConfig from 'eslint-config-lavy/tsx'{{/if}}{{#if vue}}import lavyConfig from 'eslint-config-lavy/vue'{{/if}}{{#if vuets}}import lavyConfig from 'eslint-config-lavy/vuets'{{/if}}
+{{#if js}}import jsConfig from 'eslint-config-lavy/js'{{/if}}
+{{#if ts}}import tsConfig from 'eslint-config-lavy/ts'{{/if}}
+{{#if jsx}}import jsxConfig from 'eslint-config-lavy/jsx'{{/if}}
+{{#if tsx}}import tsxConfig from 'eslint-config-lavy/tsx'{{/if}}
+{{#if vue}}import vueConfig from 'eslint-config-lavy/vue'{{/if}}
 
 export default defineConfig([
-  ...lavyConfig,
+  {{#if js}}...jsConfig,{{/if}}
+  {{#if ts}}...tsConfig,{{/if}}
+  {{#if jsx}}...jsxConfig,{{/if}}
+  {{#if tsx}}...tsxConfig,{{/if}}
+  {{#if vue}}...vueConfig,{{/if}}
   {
-    files: ['**/*.{js,jsx,ts,tsx}'],
-    languageOptions: {
-      ecmaVersion: 2022,
-      sourceType: 'module',
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      }
-    },
+    files: ['**/*.{js,jsx,ts,tsx,vue}'],
     rules: {
       // 你可以在这里添加项目特定的规则
     }

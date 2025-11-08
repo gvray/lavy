@@ -1,4 +1,5 @@
 import type { CommitRule } from '../utils/commit-validator.js'
+import type { Language, Framework, Style } from './index.js'
 
 export interface CommitConfig {
   rules?: CommitRule[]
@@ -32,9 +33,9 @@ export interface LintConfig {
 }
 
 export interface ProjectConfig {
-  language?: 'js' | 'ts'
-  framework?: 'none' | 'react' | 'vue'
-  style?: 'none' | 'css' | 'scss' | 'less'
+  language?: Language | 'none'
+  framework?: Framework
+  style?: Style
   linter?: 'eslint' | 'biome'
   platform?: 'node' | 'browser' | 'universal'
 }

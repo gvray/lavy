@@ -3,6 +3,15 @@ import ts from '@typescript-eslint/eslint-plugin'
 import tsParser from '@typescript-eslint/parser'
 import type { Linter } from 'eslint'
 import { ignores } from './ignores'
+import globals from 'globals'
+import { getProjectPlatform } from './utils/platform'
+
+const platform = getProjectPlatform()
+const platformGlobals = platform === 'node'
+  ? globals.node
+  : platform === 'universal'
+    ? { ...globals.browser, ...globals.node }
+    : globals.browser
 
 export const tsConfig: Linter.Config[] = [
   {
@@ -16,6 +25,9 @@ export const tsConfig: Linter.Config[] = [
         ecmaVersion: 'latest' as const,
         sourceType: 'module' as const,
         project: './tsconfig.json'
+      },
+      globals: {
+        ...platformGlobals
       }
     },
     plugins: {

@@ -4,6 +4,7 @@ import { detectPackageManager } from '../utils/pm'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { dirname } from 'node:path'
+import type { InstallDepsOptions } from '../types'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -13,7 +14,7 @@ export async function installDeps({
   framework,
   style,
   useCommitLint,
-}: any) {
+}: InstallDepsOptions) {
   console.log('📦 分析项目依赖需求...')
   const deps: string[] = []
   const devDeps: string[] = []
@@ -30,7 +31,7 @@ export async function installDeps({
       'eslint-config-lavy',
       'eslint-plugin-import@^2.31.0',
     )
- }
+  }
 
   if (language === 'ts') {
     devDeps.push(
@@ -39,14 +40,20 @@ export async function installDeps({
       '@typescript-eslint/eslint-plugin@^8.16.0',
       'eslint-import-resolver-typescript@^3.7.0',
     )
- }
+  }
 
   // 框架相关依赖
   if (framework === 'react') {
-    devDeps.push('eslint-plugin-react@^7.37.0', 'eslint-plugin-react-hooks@^5.1.0')
+    devDeps.push(
+      'eslint-plugin-react@^7.37.0',
+      'eslint-plugin-react-hooks@^5.1.0',
+    )
   }
   if (framework === 'vue') {
-    devDeps.push('eslint-plugin-vue@^9.32.0', '@vue/eslint-config-typescript@^14.1.0')
+    devDeps.push(
+      'eslint-plugin-vue@^9.32.0',
+      '@vue/eslint-config-typescript@^14.1.0',
+    )
   }
 
   // 样式相关依赖
@@ -62,39 +69,46 @@ export async function installDeps({
 
   // Git hooks 相关依赖（根据 useCommitLint 决定）
   if (useCommitLint) {
-    // console.log('  🔧 将安装 Git hooks 相关依赖')
-    devDeps.push(
-      'husky@^9.1.0', // Git hooks 管理工具
-      'lint-staged@^15.2.0', // 暂存文件 lint 工具
-      'tsx@^4.19.0', // TypeScript 执行器
-    )
-  } else {
-    // console.log('  ⏭️  跳过 Git hooks 相关依赖安装')
+    devDeps.push('husky@^9.1.0', 'lint-staged@^15.2.0', 'tsx@^4.19.0')
   }
 
   const pkgManager = detectPackageManager()
-  const args = pkgManager === 'npm' ? ['install', '--save-dev'] : ['add', '-D']
+
+  // 不同包管理器的静默参数，减少安装时的冗余输出
+  const depsArgs =
+    pkgManager === 'npm'
+      ? ['install', '--silent']
+      : pkgManager === 'yarn'
+        ? ['add', '--silent']
+        : ['add', '--reporter', 'silent'] // pnpm
+
+  const devArgs =
+    pkgManager === 'npm'
+      ? ['install', '--save-dev', '--silent']
+      : pkgManager === 'yarn'
+        ? ['add', '-D', '--silent']
+        : ['add', '-D', '--reporter', 'silent'] // pnpm
+
   const spinner = ora(`📦 正在使用 ${pkgManager} 安装依赖...`).start()
 
   try {
     // 安装依赖
     if (deps.length > 0) {
-      const depsArgs = pkgManager === 'npm' ? ['install'] : ['add']
       await execa(pkgManager, [...depsArgs, ...deps], {
-        stdio: 'inherit',
+        stdio: 'pipe',
       })
     }
 
     // 安装开发依赖
     if (devDeps.length > 0) {
-      await execa(pkgManager, [...args, ...devDeps], {
-        stdio: 'inherit',
+      await execa(pkgManager, [...devArgs, ...devDeps], {
+        stdio: 'pipe',
       })
     }
 
-    spinner.succeed('✅ 依赖安装完成')
+    spinner.succeed('依赖安装完成')
   } catch (e) {
-    spinner.fail('❌ 依赖安装失败')
+    spinner.fail('依赖安装失败')
     console.error('错误详情:', e)
     throw e
   }
