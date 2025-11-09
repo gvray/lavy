@@ -53,7 +53,8 @@
 	"scripts": {
 		"build": "tsup",
 		"dev": "tsup --watch",
-		"clean": "rimraf dist"
+		"clean": "rimraf dist",
+		"prepublishOnly": "npm run build"
 	},
 	"repository": {
 		"type": "git",

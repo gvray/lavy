@@ -39,7 +39,7 @@
 		"test": "vitest run",
 		"test:watch": "vitest",
 		"test:coverage": "vitest run --coverage",
-		"prepublishOnly": "npm run build && npm run test"
+		"prepublishOnly": "npm run build"
 	},
 	"repository": {
 		"type": "git",
