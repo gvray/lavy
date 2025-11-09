@@ -33,7 +33,27 @@ export default defineConfig([
   ...vueConfig,
 {{/if}}
   {
-    files: ['**/*.{js,jsx,ts,tsx,vue}'],
+{{#if ts}}
+    {{#if tsx}}
+    files: ['**/*.{ts,tsx}'],
+    {{else}}
+      {{#if vue}}
+    files: ['**/*.{ts,vue}'],
+      {{else}}
+    files: ['**/*.{ts}'],
+      {{/if}}
+    {{/if}}
+{{else}}
+    {{#if jsx}}
+    files: ['**/*.{js,jsx}'],
+    {{else}}
+      {{#if vue}}
+    files: ['**/*.{js,vue}'],
+      {{else}}
+    files: ['**/*.{js}'],
+      {{/if}}
+    {{/if}}
+{{/if}}
     rules: {
       // 你可以在这里添加项目特定的规则
     }

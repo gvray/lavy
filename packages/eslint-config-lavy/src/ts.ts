@@ -44,7 +44,3 @@ export const tsConfig: Linter.Config[] = [
 ]
 
 export default tsConfig
-
-if (typeof module !== 'undefined') {
-  module.exports = tsConfig
-}

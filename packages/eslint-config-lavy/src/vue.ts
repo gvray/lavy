@@ -35,7 +35,3 @@ export const vueConfig: Linter.Config[] = [
 ]
 
 export default vueConfig
-
-if (typeof module !== 'undefined') {
-  module.exports = vueConfig
-}

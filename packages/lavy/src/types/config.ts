@@ -33,7 +33,7 @@ export interface LintConfig {
 }
 
 export interface ProjectConfig {
-  language?: Language | 'none'
+  language?: Language
   framework?: Framework
   style?: Style
   linter?: 'eslint' | 'biome'
@@ -55,4 +55,4 @@ export interface LavyConfig {
 }
 
 // 导出类型，方便用户使用
-export type { CommitRule } from '../utils/commit-validator.ts'
+export type { CommitRule } from '../utils/commit-validator.js'

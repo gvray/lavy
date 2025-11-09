@@ -23,9 +23,11 @@ export default defineConfig({
   splitting: false, // CLI 不需要 code splitting
   shims: false,
   clean: true, // 清除旧输出
-  dts: false, // CLI 一般不导出类型，可关闭
+  dts: true, // 开启 dts 生成，向外发布类型
   minify: false, // CLI 无需压缩，便于调试
   sourcemap: false,
+  // 指定包内 tsconfig，避免受根 tsconfig 影响
+  tsconfig: 'tsconfig.json',
   banner: {
     js: '#!/usr/bin/env node', // 添加 shebang 到构建产物顶部
   },

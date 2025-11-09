@@ -4,7 +4,7 @@
 
     /* 项目 */
     // "incremental": true,                              /* 保存 .tsbuildinfo 文件以允许项目的增量编译。 */
-    "composite": true /* 启用约束，使TypeScript项目可以与项目引用一起使用。 */,
+    // "composite": true,                                /* 启用约束，使TypeScript项目可以与项目引用一起使用。 */
     // "tsBuildInfoFile": "./.tsbuildinfo",              /* 指定 .tsbuildinfo 增量编译文件的路径。 */
     // "disableSourceOfProjectReferenceRedirect": true,  /* 在引用复合项目时，禁止优先使用源文件而不是声明文件。 */
     // "disableSolutionSearching": true,                 /* 在编辑时将项目排除在多项目引用检查之外。 */

@@ -1,10 +1,10 @@
-import './cli.ts'
+import './cli'
 
 // 导出 defineConfig 函数供配置文件使用
-export { defineConfig } from './config/index.ts'
+export { defineConfig } from './config'
 
 // 导出配置生成函数
-export { generateTemplate, generateConfigs } from './core/generate.ts'
+export { generateTemplate, generateConfigs } from './core/generate'
 
 // 导出共享类型
 export type {
@@ -14,4 +14,4 @@ export type {
   ModuleType,
   InstallDepsOptions,
   GenerateConfigOptions,
-} from './types/index.ts'
+} from './types'

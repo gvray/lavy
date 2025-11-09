@@ -59,20 +59,7 @@ export async function generateEslintConfigString({
   // 动态引入 Handlebars 并渲染
   const { default: Handlebars } = await import('handlebars')
   const compile = Handlebars.compile(templateSource)
-  let result = compile(ctx)
-
-  // 如果是 CJS 格式，需要转换 import/export 语法
-  if (moduleType === 'cjs') {
-    result = result
-      .replace(
-        /import \{ defineConfig \} from 'eslint\/config'/g,
-        "const { defineConfig } = require('eslint/config')",
-      )
-      .replace(
-        /export default defineConfig\(/g,
-        'module.exports = defineConfig(',
-      )
-  }
+  const result = compile(ctx)
 
   return result
 }

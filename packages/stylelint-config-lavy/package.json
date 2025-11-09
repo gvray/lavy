@@ -1,13 +1,13 @@
 {
 	"name": "stylelint-config-lavy",
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"description": "Stylelint config with standard and prettier.",
 	"main": "./dist/index.cjs",
-	"module": "./dist/index.mjs",
+	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"exports": {
 		".": {
-			"import": "./dist/index.mjs",
+			"import": "./dist/index.js",
 			"require": "./dist/index.cjs"
 		}
 	},
