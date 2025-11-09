@@ -1,17 +1,12 @@
 {
-	"extends": "../../tsconfig.base.json",
-	"include": ["**/*.ts"],
-	"compilerOptions": {
-		"target": "ES2020",
-		"module": "ESNext",
-		"moduleResolution": "node",
-		"declaration": true,
-		"outDir": "dist",
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"strict": true,
-		"skipLibCheck": true,
-		"tsBuildInfoFile": "./node_modules/.tmp/stylelint-config-lavy/tsconfig.node.tsbuildinfo",
-		"resolveJsonModule": true
-	}
+  "extends": "../../tsconfig.base.json",
+  "include": ["index.ts"],
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": ".",
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationMap": true,
+    "sourceMap": true
+  }
 }

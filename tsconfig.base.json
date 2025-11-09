@@ -27,7 +27,7 @@
 		/* 模块 */
 		"module": "ESNext" /* 指定生成的模块代码。 */,
 		// "rootDir": "./",                                  /* 指定源文件中的根文件夹。 */
-		// "moduleResolution": "node10",                     /* 指定TypeScript如何从给定的模块说明符查找文件。 */
+		"moduleResolution": "bundler",                     /* 指定TypeScript如何从给定的模块说明符查找文件。推荐现代打包器解析。 */
 		// "baseUrl": "./",                                  /* 指定用于解析非相对模块名称的基本目录。 */
 		// "paths": {},                                      /* 指定一组将导入重新映射到其他查找位置的条目。 */
 		// "rootDirs": [],                                   /* 允许在解析模块时将多个文件夹视为一个文件夹。 */
@@ -39,7 +39,7 @@
 		// "resolvePackageJsonExports": true,                /* 解析包导入时使用package.json的'exports'字段。 */
 		// "resolvePackageJsonImports": true,                /* 解析导入时使用package.json的'imports'字段。 */
 		// "customConditions": [],                           /* 在解析导入时，除了解析器特定的默认值外，还要设置的条件。 */
-		// "resolveJsonModule": true,                        /* 启用导入.json文件。 */
+		"resolveJsonModule": true,                        /* 启用导入.json文件。 */
 		// "allowArbitraryExtensions": true,                 /* 启用导入任何扩展名的文件，前提是存在声明文件。 */
 		// "noResolve": true,                                /* 禁止'import'、'require'或'<reference>'扩展TypeScript应该添加到项目中的文件数量。 */
 
@@ -74,7 +74,7 @@
 		// "preserveValueImports": true,                     /* 在JavaScript输出中保留未使用的导入值，否则将被删除。 */
 
 		/* 互操作约束 */
-		// "isolatedModules": true,                          /* 确保每个文件都可以安全地转译，而不依赖其他导入。 */
+		"isolatedModules": true,                          /* 确保每个文件都可以安全地转译，而不依赖其他导入。 */
 		// "verbatimModuleSyntax": true,                     /* 不转换或省略任何未标记为仅类型的导入或导出，确保它们根据'module'设置以输出文件的格式编写。 */
 		// "allowSyntheticDefaultImports": true,             /* 当模块没有默认导出时，允许'import x from y'。 */
 		"esModuleInterop": true /* 发出额外的JavaScript以简化支持导入CommonJS模块。这为类型兼容性启用了'allowSyntheticDefaultImports'。 */,
