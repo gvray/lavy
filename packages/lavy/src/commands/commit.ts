@@ -492,7 +492,7 @@ async function validateCommitFile() {
       process.exit(1)
     }
 
-    console.log(`📝 验证提交信息文件: ${commitFile}`)
+    // console.log(`📝 验证提交信息文件: ${commitFile}`)
     console.log(`📄 提交信息: ${commitMessage}`)
     console.log()
 

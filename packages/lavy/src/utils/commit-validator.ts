@@ -37,7 +37,8 @@ export class CommitValidator {
    * 添加自定义验证规则
    */
   addRule(rule: CommitRule) {
-    this.config.rules!.push(rule)
+    this.config.rules = this.config.rules ?? []
+    this.config.rules.push(rule)
   }
 
   /**
@@ -56,43 +57,52 @@ export class CommitValidator {
     const trimmedMessage = message.trim()
 
     // 检查长度限制
-    if (trimmedMessage.length > this.config.maxLength!) {
+    if (
+      typeof this.config.maxLength === 'number' &&
+      trimmedMessage.length > this.config.maxLength
+    ) {
       errors.push(
         `提交信息长度不能超过 ${this.config.maxLength} 个字符，当前长度: ${trimmedMessage.length}`,
       )
     }
 
     // 检查合并提交
-    if (trimmedMessage.startsWith('Merge') && !this.config.allowMergeCommits) {
+    if (
+      trimmedMessage.startsWith('Merge') &&
+      this.config.allowMergeCommits === false
+    ) {
       errors.push('不允许合并提交')
     }
 
     // 如果不是合并提交，进行常规验证
     if (!trimmedMessage.startsWith('Merge')) {
       // 检查提交类型
-      const typeMatch = trimmedMessage.match(/^([a-z]+):/)
+      // 支持字母开头、包含数字与短横线的类型，并允许可选 scope，如 feat(scope):
+      const typeMatch = trimmedMessage.match(
+        /^([a-z][a-z0-9-]*)(\([^)]*\))?\s*[:：]/,
+      )
       if (!typeMatch) {
         errors.push('提交信息格式错误，应为: <type>: <description>')
+        return { isValid: false, errors, warnings }
       } else {
         const type = typeMatch[1]
-        if (!this.config.types!.includes(type)) {
+        const types = this.config.types ?? []
+        if (!types.includes(type)) {
           errors.push(
-            `不支持的提交类型 "${type}"，支持的类型: ${this.config.types!.join(
-              ', ',
-            )}`,
+            `不支持的提交类型 "${type}"，支持的类型: ${types.join(', ')}`,
           )
         }
       }
 
       // 检查自定义规则
-      for (const rule of this.config.rules!) {
+      for (const rule of this.config.rules ?? []) {
         if (!rule.pattern.test(trimmedMessage)) {
           errors.push(rule.message)
         }
       }
 
       // 检查自定义正则模式
-      for (const pattern of this.config.customPatterns!) {
+      for (const pattern of this.config.customPatterns ?? []) {
         if (!pattern.test(trimmedMessage)) {
           warnings.push(`提交信息不符合自定义模式: ${pattern}`)
         }
@@ -110,8 +120,9 @@ export class CommitValidator {
    * 获取提交类型说明
    */
   getTypeDescription(): string {
+    const types = this.config.types ?? []
     return `📋 支持的提交类型：
-${this.config.types!.map((type) => `  • ${type}`).join('\n')}
+${types.map((type) => `  • ${type}`).join('\n')}
 
 💡 格式: <type>: <description>
 💡 示例: feat: 添加新功能`

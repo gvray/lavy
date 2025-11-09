@@ -4,5 +4,6 @@ export const ignores = [
   'build/**',
   'coverage/**',
   '*.config.js',
-  '*.config.ts'
+  '*.config.ts',
+  '.lavy-backup/**'
 ]

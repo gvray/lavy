@@ -244,7 +244,7 @@ export function detectConfigConflict(projectRoot: string = process.cwd()) {
 
 export async function resolveConfigConflict(
   projectRoot: string = process.cwd(),
-  force: boolean = false,
+  force = false,
 ): Promise<boolean> {
   const conflictInfo = detectConfigConflict(projectRoot)
 
