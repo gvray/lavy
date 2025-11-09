@@ -1,15 +1,17 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "ESNext",
+    "module": "{{#if esm}}ESNext{{else}}CommonJS{{/if}}",
     "moduleResolution": "bundler",
-    "esModuleInterop": true,
     "strict": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    {{#if react}}
+    "jsx": "react-jsx",
+    {{/if}}
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "types": ["node"],
-    "jsx": "react-jsx"
+    "types": ["node"]
   }
 }

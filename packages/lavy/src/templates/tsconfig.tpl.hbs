@@ -1,0 +1,11 @@
+{
+  "extends": "lavy/tsconfig.base.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": [
+    "src/**/*"{{#if vue}},
+    "src/**/*.vue"{{/if}}
+  ],
+  "exclude": ["node_modules", "dist"]
+}

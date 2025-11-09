@@ -59,9 +59,20 @@ export async function generateEslintConfigString({
   // 动态引入 Handlebars 并渲染
   const { default: Handlebars } = await import('handlebars')
   const compile = Handlebars.compile(templateSource)
-  const result = compile(ctx)
+  let result = compile(ctx)
 
   // 如果是 CJS 格式，需要转换 import/export 语法
+  if (moduleType === 'cjs') {
+    result = result
+      .replace(
+        /import \{ defineConfig \} from 'eslint\/config'/g,
+        "const { defineConfig } = require('eslint/config')",
+      )
+      .replace(
+        /export default defineConfig\(/g,
+        'module.exports = defineConfig(',
+      )
+  }
 
   return result
 }
@@ -70,35 +81,61 @@ export async function generatePrettierConfigString(
   config: any,
   moduleType: 'module' | 'commonjs',
 ): Promise<string> {
-  // 读取模板文件
   const __dirname = fileURLToPath(new URL('.', import.meta.url))
-  const templatePath = resolveTemplatePath(__dirname, 'prettier.config.tpl.txt')
-  const template = await readFile(templatePath, 'utf-8')
+  const templatePath = resolveTemplatePath(__dirname, 'prettier.config.tpl.hbs')
+  const templateSource = await readFile(templatePath, 'utf-8')
 
-  // 如果是 CJS 格式，需要转换 export default 语法
+  const { default: Handlebars } = await import('handlebars')
+  const result = Handlebars.compile(templateSource)({})
+
   if (moduleType === 'commonjs') {
-    return template.replace(/export default /g, 'module.exports = ')
+    return result.replace(/export default /g, 'module.exports = ')
   }
-
-  return template
+  return result
 }
 
 export async function generateStylelintConfigString(
   config: any,
   moduleType: 'module' | 'commonjs',
 ): Promise<string> {
-  // 读取模板文件
   const __dirname = fileURLToPath(new URL('.', import.meta.url))
-  const templatePath = resolveTemplatePath(
-    __dirname,
-    'stylelint.config.tpl.txt',
-  )
-  const template = await readFile(templatePath, 'utf-8')
+  const templatePath = resolveTemplatePath(__dirname, 'stylelint.config.tpl.hbs')
+  const templateSource = await readFile(templatePath, 'utf-8')
 
-  // 如果是 CJS 格式，需要转换 export default 语法
+  const { default: Handlebars } = await import('handlebars')
+  const result = Handlebars.compile(templateSource)({})
+
   if (moduleType === 'commonjs') {
-    return template.replace(/export default /g, 'module.exports = ')
+    return result.replace(/export default /g, 'module.exports = ')
   }
+  return result
+}
 
-  return template
+export async function generateTsConfigBaseString(
+  framework: string,
+  moduleType: 'esm' | 'cjs',
+): Promise<string> {
+  const __dirname = fileURLToPath(new URL('.', import.meta.url))
+  const templatePath = resolveTemplatePath(__dirname, 'tsconfig.base.tpl.hbs')
+  const templateSource = await readFile(templatePath, 'utf-8')
+  const { default: Handlebars } = await import('handlebars')
+  return Handlebars.compile(templateSource)({
+    esm: moduleType === 'esm',
+    react: framework === 'react',
+  })
+}
+
+export async function generateTsConfigString(
+  framework: string,
+  moduleType: 'esm' | 'cjs',
+): Promise<string> {
+  const __dirname = fileURLToPath(new URL('.', import.meta.url))
+  const templatePath = resolveTemplatePath(__dirname, 'tsconfig.tpl.hbs')
+  const templateSource = await readFile(templatePath, 'utf-8')
+  const { default: Handlebars } = await import('handlebars')
+  return Handlebars.compile(templateSource)({
+    vue: framework === 'vue',
+    react: framework === 'react',
+    esm: moduleType === 'esm',
+  })
 }
