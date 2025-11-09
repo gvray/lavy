@@ -14,6 +14,7 @@ export interface InstallDepsOptions {
   framework: 'react' | 'vue' | 'none'  // install.ts中使用的简化版本
   style: 'css' | 'scss' | 'less' | 'none'  // install.ts中使用的简化版本
   useCommitLint: boolean
+  linter?: 'eslint' | 'biome'
 }
 
 // 生成配置文件函数使用的参数类型（完整版本）

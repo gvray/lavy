@@ -48,6 +48,17 @@ export async function promptOptions() {
       ],
       initial: 0,
     },
+    // 新增：选择代码检查工具
+    {
+      type: 'select',
+      name: 'linter',
+      message: '选择代码检查工具',
+      choices: [
+        { title: 'ESLint + Prettier', value: 'eslint' },
+        { title: 'Biome', value: 'biome' },
+      ],
+      initial: 0,
+    },
   ]
 
   // 只有在 Git 项目中才显示 commitlint 选项

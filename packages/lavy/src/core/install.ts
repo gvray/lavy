@@ -14,16 +14,21 @@ export async function installDeps({
   framework,
   style,
   useCommitLint,
+  linter = 'eslint',
 }: InstallDepsOptions) {
   console.log('📦 分析项目依赖需求...')
   const deps: string[] = []
   const devDeps: string[] = []
 
-  // 基础依赖
-  devDeps.push('prettier@^3.3.0')
+  // 基础依赖：根据 linter 选择
+  if (linter === 'biome') {
+    devDeps.push('@biomejs/biome@^1.9.4')
+  } else {
+    devDeps.push('prettier@^3.3.0')
+  }
 
-  // 语言相关依赖
-  if (language === 'js' || language === 'ts') {
+  // 语言相关依赖（仅在使用 ESLint 时安装）
+  if (linter === 'eslint' && (language === 'js' || language === 'ts')) {
     devDeps.push(
       'eslint@^9.15.0',
       '@eslint/js@^9.15.0',
@@ -33,7 +38,7 @@ export async function installDeps({
     )
   }
 
-  if (language === 'ts') {
+  if (linter === 'eslint' && language === 'ts') {
     devDeps.push(
       'typescript@^5.7.0',
       '@typescript-eslint/parser@^8.16.0',
@@ -42,21 +47,21 @@ export async function installDeps({
     )
   }
 
-  // 框架相关依赖
-  if (framework === 'react') {
+  // 框架相关依赖（仅在使用 ESLint 时安装）
+  if (linter === 'eslint' && framework === 'react') {
     devDeps.push(
       'eslint-plugin-react@^7.37.0',
       'eslint-plugin-react-hooks@^5.1.0',
     )
   }
-  if (framework === 'vue') {
+  if (linter === 'eslint' && framework === 'vue') {
     devDeps.push(
       'eslint-plugin-vue@^9.32.0',
       '@vue/eslint-config-typescript@^14.1.0',
     )
   }
 
-  // 样式相关依赖
+  // 样式相关依赖（与代码检查工具无关）
   if (style !== 'none') {
     devDeps.push(
       'stylelint@^16.11.0',

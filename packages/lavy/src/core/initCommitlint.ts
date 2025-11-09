@@ -9,7 +9,7 @@ import type { Language, Framework, Style } from '../types'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-export async function initCommitlint({ language, framework, style }: { language: Language; framework: Framework; style: Style }) {
+export async function initCommitlint({ language, framework, style, linter = 'eslint' }: { language: Language; framework: Framework; style: Style; linter?: 'eslint' | 'biome' }) {
   const spinner = ora('🔧 正在配置 Git hooks 和 lint-staged...').start()
 
   try {
@@ -42,7 +42,7 @@ export async function initCommitlint({ language, framework, style }: { language:
 
     // 6. 创建 lint-staged 配置（在 package.json 所在目录）
     spinner.text = '🔍 创建 lint-staged 配置...'
-    await createLintStagedConfig(workDir, { language, framework, style })
+    await createLintStagedConfig(workDir, { language, framework, style, linter })
 
     // 7. 添加 pre-commit 钩子（lint-staged）
     spinner.text = '🔧 配置 pre-commit 钩子...'
@@ -78,17 +78,9 @@ export async function initCommitlint({ language, framework, style }: { language:
 
     // 9. 更新 package.json 脚本（在 package.json 所在目录）
     spinner.text = '📦 更新 package.json 脚本...'
-    await updatePackageScripts(workDir)
+    await updatePackageScripts(workDir, linter, language)
 
     spinner.succeed('✅ Git hooks 和 lint-staged 配置完成！')
-
-    // console.log('\n📋 已配置的功能：')
-    // console.log('  🔍 pre-commit: 运行 lint-staged 检查暂存文件')
-    // console.log('  📝 commit-msg: 使用 lavy commit 验证提交信息')
-    // console.log(
-    //   '  🧹 lint-staged: 自动格式化暂存文件（配置在 package.json 中）',
-    // )
-    // console.log('  📋 lavy commit: 内置提交信息验证器')
 
     if (!hasPackageJson) {
       console.log('\n⚠️  注意：')
@@ -144,7 +136,7 @@ async function getGitRoot(): Promise<string | null> {
 
 async function createLintStagedConfig(
   workDir: string,
-  { language, framework, style }: { language: Language; framework: Framework; style: Style },
+  { language, framework, style, linter }: { language: Language; framework: Framework; style: Style; linter: 'eslint' | 'biome' },
   force = true,
 ) {
   const packageJsonPath = join(workDir, 'package.json')
@@ -170,6 +162,7 @@ async function createLintStagedConfig(
       language,
       framework,
       style,
+      linter,
     })
 
     console.log(lintStagedConfig)
@@ -193,48 +186,45 @@ async function createLintStagedConfig(
   }
 }
 
-function generateLintStagedConfig({ language, framework, style }: { language: Language; framework: Framework; style: Style }) {
+function generateLintStagedConfig({ language, framework, style, linter }: { language: Language; framework: Framework; style: Style; linter: 'eslint' | 'biome' }) {
   const config: Record<string, string[]> = {}
 
-  // 根据语言配置
+  const codeCommand = linter === 'biome' ? 'biome check --write' : 'eslint --fix'
+  const formatCommand = linter === 'biome' ? 'biome format --write' : 'prettier --write'
+
+  // 根据语言配置：仅添加对应语言的后缀
   if (language === 'ts') {
-    // TypeScript 项目
-    config['*.{ts,tsx}'] = ['eslint --fix', 'prettier --write']
-    config['*.{js,jsx}'] = ['eslint --fix', 'prettier --write']
+    config['*.{ts,tsx}'] = [codeCommand, ...(linter === 'eslint' ? ['prettier --write'] : [])]
   } else if (language === 'js') {
-    // JavaScript 项目
-    config['*.{js,jsx}'] = ['eslint --fix', 'prettier --write']
+    config['*.{js,jsx}'] = [codeCommand, ...(linter === 'eslint' ? ['prettier --write'] : [])]
   }
 
-  // 根据框架配置
+  // 根据框架配置（避免重复添加 jsx/tsx）
   if (framework === 'vue') {
-    config['*.vue'] = ['eslint --fix', 'prettier --write']
-  } else if (framework === 'react') {
-    config['*.{jsx,tsx}'] = ['eslint --fix', 'prettier --write']
+    config['*.vue'] = [codeCommand, ...(linter === 'eslint' ? ['prettier --write'] : [])]
   } else if (framework === 'svelte') {
-    config['*.svelte'] = ['eslint --fix', 'prettier --write']
-  } else if (framework === 'solid') {
-    config['*.{jsx,tsx}'] = ['eslint --fix', 'prettier --write']
+    config['*.svelte'] = [codeCommand, ...(linter === 'eslint' ? ['prettier --write'] : [])]
   }
+  // React/Solid 由语言模式覆盖，不额外添加
 
-  // 根据样式配置
+  // 根据样式配置（Biome 模式不添加 Prettier）
   if (style === 'css') {
-    config['*.css'] = ['stylelint --fix', 'prettier --write']
+    config['*.css'] = ['stylelint --fix', ...(linter === 'eslint' ? ['prettier --write'] : [])]
   } else if (style === 'scss' || style === 'sass') {
-    config['*.{scss,sass}'] = ['stylelint --fix', 'prettier --write']
+    config['*.{scss,sass}'] = ['stylelint --fix', ...(linter === 'eslint' ? ['prettier --write'] : [])]
   } else if (style === 'less') {
-    config['*.less'] = ['stylelint --fix', 'prettier --write']
+    config['*.less'] = ['stylelint --fix', ...(linter === 'eslint' ? ['prettier --write'] : [])]
   } else if (style === 'stylus') {
-    config['*.styl'] = ['stylelint --fix', 'prettier --write']
+    config['*.styl'] = ['stylelint --fix', ...(linter === 'eslint' ? ['prettier --write'] : [])]
   }
 
-  // 通用配置（总是添加）
-  config['*.{json,md,yml,yaml}'] = ['prettier --write']
+  // 通用配置
+  config['*.{json,md,yml,yaml}'] = [formatCommand]
 
   return config
 }
 
-async function updatePackageScripts(workDir: string) {
+async function updatePackageScripts(workDir: string, linter: 'eslint' | 'biome', language: Language) {
   const packageJsonPath = join(workDir, 'package.json')
 
   if (!existsSync(packageJsonPath)) {
@@ -250,17 +240,30 @@ async function updatePackageScripts(workDir: string) {
       packageJson.scripts = {}
     }
 
-    // 添加有用的脚本
-    const newScripts = {
-      prepare: 'husky install',
-      lint: 'eslint . --ext .js,.jsx,.ts,.tsx',
-      'lint:fix': 'eslint . --ext .js,.jsx,.ts,.tsx --fix',
-      format: 'prettier --write .',
-      'format:check': 'prettier --check .',
-      'type-check': 'tsc --noEmit',
-      'commit:check': 'lavy commit --test', // 测试提交验证器
-      'commit:config': 'lavy commit --config', // 查看提交配置
-    }
+    // 添加有用的脚本（根据 linter 选择）
+    const isTS = language === 'ts'
+    const newScripts =
+      linter === 'biome'
+        ? {
+            prepare: 'husky install',
+            lint: 'biome lint .',
+            'lint:fix': 'biome check --write .',
+            format: 'biome format --write .',
+            'format:check': 'biome format --check .',
+            ...(isTS ? { 'type-check': 'tsc --noEmit' } : {}),
+            'commit:check': 'lavy commit --test',
+            'commit:config': 'lavy commit --config',
+          }
+        : {
+            prepare: 'husky install',
+            lint: 'eslint . --ext .js,.jsx,.ts,.tsx',
+            'lint:fix': 'eslint . --ext .js,.jsx,.ts,.tsx --fix',
+            format: 'prettier --write .',
+            'format:check': 'prettier --check .',
+            ...(isTS ? { 'type-check': 'tsc --noEmit' } : {}),
+            'commit:check': 'lavy commit --test',
+            'commit:config': 'lavy commit --config',
+          }
 
     // 合并脚本，不覆盖现有的
     packageJson.scripts = {

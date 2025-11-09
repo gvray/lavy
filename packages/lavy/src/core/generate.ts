@@ -67,20 +67,24 @@ export async function generateTemplate(options: {
   framework: Framework
   style: Style
   mode?: 'force' | 'merge'
+  linter?: 'eslint' | 'biome'
 }) {
   const packageJsonType = getPackageJsonType()
   const moduleType = packageJsonType === 'module' ? 'esm' : 'cjs'
-  const { language, framework, style, mode = 'force' } = options
+  const { language, framework, style, mode = 'force', linter = 'eslint' } = options
 
   const eslintConfigFilename = 'eslint.config.js'
   const prettierFilename = 'prettier.config.js'
   const stylelintFilename = 'stylelint.config.js'
+  const biomeFilename = 'biome.json'
 
   const shouldWrite = (file: string) =>
     mode === 'force' || !existsSync(resolve(process.cwd(), file))
 
-  // ESLint
-  if (shouldWrite(eslintConfigFilename)) {
+  const useBiome = linter === 'biome'
+
+  // ESLint（当未使用 Biome 时生成）
+  if (!useBiome && shouldWrite(eslintConfigFilename)) {
     const content = await generateEslintConfigString({
       language,
       framework,
@@ -94,14 +98,32 @@ export async function generateTemplate(options: {
     )
   }
 
-  // Prettier
-  if (shouldWrite(prettierFilename)) {
+  // Prettier（当未使用 Biome 时生成）
+  if (!useBiome && shouldWrite(prettierFilename)) {
     const content = await generatePrettierConfigString({}, packageJsonType)
     await fs.writeFile(
       resolve(process.cwd(), prettierFilename),
       content,
       'utf-8',
     )
+  }
+
+  // Biome（当选择使用 Biome 时生成默认配置）
+  if (useBiome && shouldWrite(biomeFilename)) {
+    const biomeContent = JSON.stringify(
+      {
+        $schema: 'https://biomejs.dev/schemas/1.9.4/schema.json',
+        linter: {
+          enabled: true,
+        },
+        formatter: {
+          enabled: true,
+        },
+      },
+      null,
+      2,
+    )
+    await fs.writeFile(resolve(process.cwd(), biomeFilename), biomeContent, 'utf-8')
   }
 
   // Stylelint（style 为 none 时跳过）

@@ -33,7 +33,6 @@ cli
   .option('-i, --init', '初始化配置文件')
   .option('-c, --config', '显示当前配置')
   .action((options) => {
-    console.log('options', options)
     runCommitCommand(options)
   })
 

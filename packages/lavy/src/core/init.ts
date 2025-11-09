@@ -110,20 +110,37 @@ export async function runInit() {
     }
   }
 
+  // 若选择 JavaScript 项目，清理可能存在的 TypeScript 配置文件，避免混淆
+  if (answers.language === 'js') {
+    const tsFiles = ['tsconfig.json', 'tsconfig.base.json']
+    for (const f of tsFiles) {
+      if (existsSync(f)) {
+        try {
+          await unlink(f)
+          console.log(`  🗑️  已移除与 JS 项目不相关的配置文件: ${f}`)
+        } catch (error) {
+          console.warn(`  ⚠️  移除失败: ${f}`, error)
+        }
+      }
+    }
+  }
+
   // 生成模板（根据模式控制是否覆盖）
   await generateTemplate({
     language: answers.language,
     framework: answers.framework,
     style: answers.style,
     mode: generationMode,
+    linter: answers.linter,
   })
 
-  // 安装依赖 临时注释方法我快速测试
+  // 安装依赖：根据选择的 linter 决定安装 ESLint/Prettier 或 Biome
   await installDeps({
     language: answers.language,
     framework: answers.framework,
     style: answers.style,
     useCommitLint: answers.useCommitLint,
+    linter: answers.linter,
   })
 
   // 只有在启用 commitlint 时才配置 Git hooks
@@ -132,33 +149,33 @@ export async function runInit() {
       language: answers.language,
       framework: answers.framework,
       style: answers.style,
+      linter: answers.linter,
     })
   }
 
   // 创建 lavy.config.js 配置文件（合并模式下如果已存在则保留旧配置）
+  const useBiome = answers.linter === 'biome'
   const config: LavyConfig = {
     project: {
       language: answers.language,
       framework: answers.framework,
       style: answers.style,
-      linter: 'eslint', // 默认使用 eslint
+      linter: useBiome ? 'biome' : 'eslint',
       platform: answers.platform ?? 'browser',
     },
     lint: {
-      eslint: {
-        enabled: true,
-        config: 'eslint.config.js',
-      },
+      eslint: useBiome
+        ? { enabled: false, config: 'eslint.config.js' }
+        : { enabled: true, config: 'eslint.config.js' },
       stylelint: {
         enabled: answers.style !== 'none',
         config: 'stylelint.config.js',
       },
-      prettier: {
-        enabled: true,
-        config: 'prettier.config.js',
-      },
+      prettier: useBiome
+        ? { enabled: false, config: 'prettier.config.js' }
+        : { enabled: true, config: 'prettier.config.js' },
       biome: {
-        enabled: false,
+        enabled: useBiome,
         config: 'biome.json',
       },
     },
