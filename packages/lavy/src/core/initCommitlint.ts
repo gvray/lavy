@@ -9,7 +9,17 @@ import type { Language, Framework, Style } from '../types'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-export async function initCommitlint({ language, framework, style, linter = 'eslint' }: { language: Language; framework: Framework; style: Style; linter?: 'eslint' | 'biome' }) {
+export async function initCommitlint({
+  language,
+  framework,
+  style,
+  linter = 'eslint',
+}: {
+  language: Language
+  framework: Framework
+  style: Style
+  linter?: 'eslint' | 'biome'
+}) {
   const spinner = ora('🔧 正在配置 Git hooks 和 lint-staged...').start()
 
   try {
@@ -42,7 +52,12 @@ export async function initCommitlint({ language, framework, style, linter = 'esl
 
     // 6. 创建 lint-staged 配置（在 package.json 所在目录）
     spinner.text = '🔍 创建 lint-staged 配置...'
-    await createLintStagedConfig(workDir, { language, framework, style, linter })
+    await createLintStagedConfig(workDir, {
+      language,
+      framework,
+      style,
+      linter,
+    })
 
     // 7. 添加 pre-commit 钩子（lint-staged）
     spinner.text = '🔧 配置 pre-commit 钩子...'
@@ -136,7 +151,17 @@ async function getGitRoot(): Promise<string | null> {
 
 async function createLintStagedConfig(
   workDir: string,
-  { language, framework, style, linter }: { language: Language; framework: Framework; style: Style; linter: 'eslint' | 'biome' },
+  {
+    language,
+    framework,
+    style,
+    linter,
+  }: {
+    language: Language
+    framework: Framework
+    style: Style
+    linter: 'eslint' | 'biome'
+  },
   force = true,
 ) {
   const packageJsonPath = join(workDir, 'package.json')
@@ -186,36 +211,81 @@ async function createLintStagedConfig(
   }
 }
 
-function generateLintStagedConfig({ language, framework, style, linter }: { language: Language; framework: Framework; style: Style; linter: 'eslint' | 'biome' }) {
+function generateLintStagedConfig({
+  language,
+  framework,
+  style,
+  linter,
+}: {
+  language: Language
+  framework: Framework
+  style: Style
+  linter: 'eslint' | 'biome'
+}) {
   const config: Record<string, string[]> = {}
 
-  const codeCommand = linter === 'biome' ? 'biome check --write' : 'eslint --fix'
-  const formatCommand = linter === 'biome' ? 'biome format --write' : 'prettier --write'
+  const codeCommand =
+    linter === 'biome' ? 'biome check --write' : 'eslint --fix'
+  const formatCommand =
+    linter === 'biome' ? 'biome format --write' : 'prettier --write'
 
+  const lintFile = []
   // 根据语言配置：仅添加对应语言的后缀
-  if (language === 'ts') {
-    config['*.{ts,tsx}'] = [codeCommand, ...(linter === 'eslint' ? ['prettier --write'] : [])]
-  } else if (language === 'js') {
-    config['*.{js,jsx}'] = [codeCommand, ...(linter === 'eslint' ? ['prettier --write'] : [])]
+  // 基础语言文件
+  const langMap: Record<string, string[]> = {
+    ts: ['ts'],
+    js: ['js'],
   }
+  if (langMap[language]) lintFile.push(...langMap[language])
+
+  // 框架相关文件
+  const frameworkMap: Record<string, Record<string, string>> = {
+    react: { ts: 'tsx', js: 'jsx' },
+  }
+  if (frameworkMap[framework]?.[language]) {
+    lintFile.push(frameworkMap[framework][language])
+  }
+  // 配置命令
+  config[`*.{${lintFile.join(',')}}`] = [
+    codeCommand,
+    ...(linter === 'eslint' ? ['prettier --write'] : []),
+  ]
 
   // 根据框架配置（避免重复添加 jsx/tsx）
   if (framework === 'vue') {
-    config['*.vue'] = [codeCommand, ...(linter === 'eslint' ? ['prettier --write'] : [])]
+    config['*.vue'] = [
+      codeCommand,
+      ...(linter === 'eslint' ? ['prettier --write'] : []),
+    ]
   } else if (framework === 'svelte') {
-    config['*.svelte'] = [codeCommand, ...(linter === 'eslint' ? ['prettier --write'] : [])]
+    config['*.svelte'] = [
+      codeCommand,
+      ...(linter === 'eslint' ? ['prettier --write'] : []),
+    ]
   }
   // React/Solid 由语言模式覆盖，不额外添加
 
   // 根据样式配置（Biome 模式不添加 Prettier）
   if (style === 'css') {
-    config['*.css'] = ['stylelint --fix', ...(linter === 'eslint' ? ['prettier --write'] : [])]
+    config['*.css'] = [
+      'stylelint --fix',
+      ...(linter === 'eslint' ? ['prettier --write'] : []),
+    ]
   } else if (style === 'scss' || style === 'sass') {
-    config['*.{scss,sass}'] = ['stylelint --fix', ...(linter === 'eslint' ? ['prettier --write'] : [])]
+    config['*.{scss,sass}'] = [
+      'stylelint --fix',
+      ...(linter === 'eslint' ? ['prettier --write'] : []),
+    ]
   } else if (style === 'less') {
-    config['*.less'] = ['stylelint --fix', ...(linter === 'eslint' ? ['prettier --write'] : [])]
+    config['*.less'] = [
+      'stylelint --fix',
+      ...(linter === 'eslint' ? ['prettier --write'] : []),
+    ]
   } else if (style === 'stylus') {
-    config['*.styl'] = ['stylelint --fix', ...(linter === 'eslint' ? ['prettier --write'] : [])]
+    config['*.styl'] = [
+      'stylelint --fix',
+      ...(linter === 'eslint' ? ['prettier --write'] : []),
+    ]
   }
 
   // 通用配置
@@ -224,7 +294,11 @@ function generateLintStagedConfig({ language, framework, style, linter }: { lang
   return config
 }
 
-async function updatePackageScripts(workDir: string, linter: 'eslint' | 'biome', language: Language) {
+async function updatePackageScripts(
+  workDir: string,
+  linter: 'eslint' | 'biome',
+  language: Language,
+) {
   const packageJsonPath = join(workDir, 'package.json')
 
   if (!existsSync(packageJsonPath)) {

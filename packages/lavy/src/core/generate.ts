@@ -8,6 +8,7 @@ import {
   generateTsConfigBaseString,
   generateTsConfigString,
   getPackageJsonType,
+  generateBiomeConfigString,
 } from './utils'
 import type {
   GenerateConfigOptions,
@@ -43,6 +44,7 @@ export async function generateConfigs(options: GenerateConfigOptions) {
     const stylelintContent = await generateStylelintConfigString(
       {},
       pkgModuleType,
+      { framework },
     )
     const stylelintFilename = 'stylelint.config.js'
     await fs.writeFile(
@@ -110,25 +112,13 @@ export async function generateTemplate(options: {
 
   // Biome（当选择使用 Biome 时生成默认配置）
   if (useBiome && shouldWrite(biomeFilename)) {
-    const biomeContent = JSON.stringify(
-      {
-        $schema: 'https://biomejs.dev/schemas/1.9.4/schema.json',
-        linter: {
-          enabled: true,
-        },
-        formatter: {
-          enabled: true,
-        },
-      },
-      null,
-      2,
-    )
+    const biomeContent = await generateBiomeConfigString()
     await fs.writeFile(resolve(process.cwd(), biomeFilename), biomeContent, 'utf-8')
   }
 
   // Stylelint（style 为 none 时跳过）
   if (style !== 'none' && shouldWrite(stylelintFilename)) {
-    const content = await generateStylelintConfigString({}, packageJsonType)
+    const content = await generateStylelintConfigString({}, packageJsonType, { framework })
     await fs.writeFile(
       resolve(process.cwd(), stylelintFilename),
       content,

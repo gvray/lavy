@@ -1,13 +1,13 @@
 export default {
   extends: [
-    'stylelint-config-standard',
-    'stylelint-config-recommended-vue'
+    'stylelint-config-lavy'{{#if vue}},
+    'stylelint-config-recommended-vue'{{/if}}
   ],
-  
+
   plugins: [
     'stylelint-order'
   ],
-  
+
   rules: {
     // 颜色
     'color-hex-case': 'lower',

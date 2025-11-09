@@ -84,18 +84,29 @@ export async function generatePrettierConfigString(
 export async function generateStylelintConfigString(
   config: any,
   moduleType: 'module' | 'commonjs',
+  context?: { framework?: string },
 ): Promise<string> {
   const __dirname = fileURLToPath(new URL('.', import.meta.url))
   const templatePath = resolveTemplatePath(__dirname, 'stylelint.config.tpl.hbs')
   const templateSource = await readFile(templatePath, 'utf-8')
 
   const { default: Handlebars } = await import('handlebars')
-  const result = Handlebars.compile(templateSource)({})
+  const result = Handlebars.compile(templateSource)({
+    vue: context?.framework === 'vue',
+  })
 
   if (moduleType === 'commonjs') {
     return result.replace(/export default /g, 'module.exports = ')
   }
   return result
+}
+
+export async function generateBiomeConfigString(): Promise<string> {
+  const __dirname = fileURLToPath(new URL('.', import.meta.url))
+  const templatePath = resolveTemplatePath(__dirname, 'biome.tpl.hbs')
+  const templateSource = await readFile(templatePath, 'utf-8')
+  const { default: Handlebars } = await import('handlebars')
+  return Handlebars.compile(templateSource)({})
 }
 
 export async function generateTsConfigBaseString(

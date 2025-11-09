@@ -65,9 +65,12 @@ export async function installDeps({
   if (style !== 'none') {
     devDeps.push(
       'stylelint@^16.11.0',
-      'stylelint-config-standard@^37.0.0',
-      'stylelint-config-prettier@^9.0.0',
+      'stylelint-config-lavy',
+      'stylelint-order'
     )
+    if (framework === 'vue') {
+      devDeps.push('stylelint-config-recommended-vue@^1.5.0')
+    }
     if (style === 'scss') devDeps.push('stylelint-scss@^6.9.0')
     if (style === 'less') devDeps.push('stylelint-less@^3.0.0')
   }
