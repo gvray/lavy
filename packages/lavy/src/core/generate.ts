@@ -5,7 +5,6 @@ import {
   generateEslintConfigString,
   generatePrettierConfigString,
   generateStylelintConfigString,
-  generateTsConfigBaseString,
   generateTsConfigString,
   getPackageJsonType,
   generateBiomeConfigString,

@@ -21,15 +21,14 @@ export function getPackageJsonType(
   }
 }
 
-function resolveTemplatePath(__dirname: string, filename: string): string {
+function resolveTemplatePath(__dirname: string, filename: string) {
   const candidates = [
-    join(__dirname, 'templates', filename), // 适配打包后的 dist 目录
-    join(__dirname, '../templates', filename), // 适配开发态 src/core -> src/templates
+    join(__dirname, 'templates', filename),
+    join(__dirname, '../templates', filename),
   ]
   for (const p of candidates) {
     if (existsSync(p)) return p
   }
-  // 回退：直接返回第一个候选，交由 readFile 报错便于定位
   return candidates[0]
 }
 
@@ -39,12 +38,10 @@ export async function generateEslintConfigString({
   style,
   moduleType,
 }: GenerateConfigOptions): Promise<string> {
-  // 读取模板文件
   const __dirname = fileURLToPath(new URL('.', import.meta.url))
   const templatePath = resolveTemplatePath(__dirname, 'eslint.config.tpl.hbs')
   const templateSource = await readFile(templatePath, 'utf-8')
 
-  // 计算上下文
   const ctx = {
     js: language !== 'ts',
     ts: language === 'ts',
@@ -56,7 +53,6 @@ export async function generateEslintConfigString({
     cjs: moduleType === 'cjs',
   }
 
-  // 动态引入 Handlebars 并渲染
   const { default: Handlebars } = await import('handlebars')
   const compile = Handlebars.compile(templateSource)
   const result = compile(ctx)
@@ -75,10 +71,13 @@ export async function generatePrettierConfigString(
   const { default: Handlebars } = await import('handlebars')
   const result = Handlebars.compile(templateSource)({})
 
+  // 纠正常见拼写错误，防止出现 "moudle.exports"
+  const sanitized = result.replace(/moudle\.exports/g, 'module.exports')
+
   if (moduleType === 'commonjs') {
-    return result.replace(/export default /g, 'module.exports = ')
+    return sanitized.replace(/export default /g, 'module.exports = ')
   }
-  return result
+  return sanitized
 }
 
 export async function generateStylelintConfigString(
@@ -95,10 +94,13 @@ export async function generateStylelintConfigString(
     vue: context?.framework === 'vue',
   })
 
+  // 纠正常见拼写错误，防止出现 "moudle.exports"
+  const sanitized = result.replace(/moudle\.exports/g, 'module.exports')
+
   if (moduleType === 'commonjs') {
-    return result.replace(/export default /g, 'module.exports = ')
+    return sanitized.replace(/export default /g, 'module.exports = ')
   }
-  return result
+  return sanitized
 }
 
 export async function generateBiomeConfigString(): Promise<string> {

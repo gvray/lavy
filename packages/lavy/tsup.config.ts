@@ -45,5 +45,6 @@ export default defineConfig({
   noExternal: ['cac', 'ora', 'colorette'],
   onSuccess: async () => {
     copyDir('src/templates', 'dist/templates')
+    copyFileSync('../../tsconfig.base.json', './tsconfig.base.json')
   },
 })

@@ -89,15 +89,15 @@
     // "strictBindCallApply": true,                      /* 检查'bind'、'call'和'apply'方法的参数是否与原始函数匹配。 */
     // "strictPropertyInitialization": true,             /* 检查类属性是否已声明但未在构造函数中设置。 */
     // "noImplicitThis": true,                           /* 当'this'被赋予'any'类型时启用错误报告。 */
-    // "useUnknownInCatchVariables": true,               /* 默认将catch子句变量设为'unknown'而不是'any'。 */
+    "useUnknownInCatchVariables": true,               /* 默认将catch子句变量设为'unknown'而不是'any'。 */
     // "alwaysStrict": true,                             /* 确保始终发出'use strict'。 */
-    // "noUnusedLocals": true,                           /* 当局部变量未被读取时启用错误报告。 */
-    // "noUnusedParameters": true,                       /* 当函数参数未被读取时引发错误。 */
-    // "exactOptionalPropertyTypes": true,               /* 按原样解释可选属性类型，而不是添加'undefined'。 */
-    // "noImplicitReturns": true,                        /* 为函数中不显式返回的代码路径启用错误报告。 */
-    // "noFallthroughCasesInSwitch": true,               /* 为switch语句中的贯穿情况启用错误报告。 */
+    "noUnusedLocals": true,                           /* 当局部变量未被读取时启用错误报告。 */
+    "noUnusedParameters": true,                       /* 当函数参数未被读取时引发错误。 */
+    "exactOptionalPropertyTypes": true,               /* 按原样解释可选属性类型，而不是添加'undefined'。 */
+    "noImplicitReturns": true,                        /* 为函数中不显式返回的代码路径启用错误报告。 */
+    "noFallthroughCasesInSwitch": true,               /* 为switch语句中的贯穿情况启用错误报告。 */
     // "noUncheckedIndexedAccess": true,                 /* 使用索引访问时，将'undefined'添加到类型中。 */
-    // "noImplicitOverride": true,                       /* 确保派生类中的覆盖成员用override修饰符标记。 */
+    "noImplicitOverride": true,                       /* 确保派生类中的覆盖成员用override修饰符标记。 */
     // "noPropertyAccessFromIndexSignature": true,       /* 强制使用索引访问器访问使用索引类型声明的键。 */
     // "allowUnusedLabels": true,                        /* 禁用未使用标签的错误报告。 */
     // "allowUnreachableCode": true,                     /* 禁用不可达代码的错误报告。 */

@@ -50,7 +50,7 @@
 		"url": "https://github.com/gvray/lavy/issues"
 	},
 	"bin": {
-		"lavy": "dist/index.mjs"
+		"lavy": "dist/index.js"
 	},
 	"homepage": "https://github.com/gvray/lavy#readme",
 	"engines": {

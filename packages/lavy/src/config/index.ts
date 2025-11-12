@@ -51,7 +51,10 @@ export function mergeConfig(
         ...(defaultConfig.commit?.rules || []),
         ...(userConfig.commit?.rules || []),
       ],
-      types: userConfig.commit.types || defaultConfig.commit?.types,
+      types:
+        userConfig.commit.types ??
+        defaultConfig.commit?.types ??
+        [...DEFAULT_COMMIT_TYPES],
       customPatterns: [
         ...(defaultConfig.commit?.customPatterns || []),
         ...(userConfig.commit?.customPatterns || []),

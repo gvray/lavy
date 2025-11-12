@@ -1,50 +1,50 @@
 /** @type {import("prettier").Config} */
 export default {
-  // 打印宽度
-  printWidth: 80,
+  // Maximum line width for better readability
+  printWidth: 100,
 
-  // 制表符宽度
+  // Number of spaces per indentation level
   tabWidth: 2,
 
-  // 使用制表符而不是空格
+  // Use spaces instead of tabs
   useTabs: false,
 
-  // 行尾分号
-  semi: false,
+  // Add semicolons at the end of statements (reduces diff noise)
+  semi: true,
 
-  // 单引号
+  // Use single quotes instead of double quotes
   singleQuote: true,
 
-  // 对象属性引号
+  // Only add quotes around object properties when required
   quoteProps: 'as-needed',
 
-  // JSX 单引号
-  jsxSingleQuote: true,
+  // Use double quotes in JSX (consistent with HTML)
+  jsxSingleQuote: false,
 
-  // 尾随逗号
-  trailingComma: 'none',
+  // Add trailing commas where valid in ES5 (objects, arrays, etc.)
+  trailingComma: 'es5',
 
-  // 括号间距
+  // Add spaces inside object literals
   bracketSpacing: true,
 
-  // JSX 标签的反尖括号换行
+  // Place the closing bracket of JSX elements on a new line
   bracketSameLine: false,
 
-  // 箭头函数参数括号
-  arrowParens: 'avoid',
+  // Always include parentheses around arrow function parameters
+  arrowParens: 'always',
 
-  // 换行符
+  // Use LF for line endings (consistent across OS)
   endOfLine: 'lf',
 
-  // 嵌入格式化
+  // Automatically format embedded code (e.g., JS inside HTML)
   embeddedLanguageFormatting: 'auto',
 
-  // HTML 空白敏感度
+  // Respect CSS display property when formatting HTML
   htmlWhitespaceSensitivity: 'css',
 
-  // Vue 文件中的 script 和 style 标签缩进
+  // Don't indent <script> and <style> tags in Vue files
   vueIndentScriptAndStyle: false,
 
-  // 单行属性换行
-  singleAttributePerLine: false
+  // Put each attribute on its own line for better readability
+  singleAttributePerLine: true,
 }

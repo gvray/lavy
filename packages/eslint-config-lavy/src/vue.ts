@@ -1,4 +1,3 @@
-import js from '@eslint/js'
 import vue from 'eslint-plugin-vue'
 import type { Linter } from 'eslint'
 import { ignores } from './ignores'
