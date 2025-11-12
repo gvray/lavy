@@ -18,10 +18,10 @@ function copyDir(src: string, dest: string) {
 export default defineConfig({
   entry: ['src/index.ts'],
   outDir: 'dist',
-  format: ['esm'], // 支持双格式输出
+  format: ['esm', 'cjs'], // 支持双格式输出
   target: 'node18', // 根据你的 Node.js 版本调整
   splitting: false, // CLI 不需要 code splitting
-  shims: false,
+  shims: true,
   clean: true, // 清除旧输出
   dts: true, // 开启 dts 生成，向外发布类型
   minify: false, // CLI 无需压缩，便于调试
@@ -31,7 +31,6 @@ export default defineConfig({
   banner: {
     js: '#!/usr/bin/env node', // 添加 shebang 到构建产物顶部
   },
-  outExtension: () => ({ js: '.mjs' }),
   external: [
     'execa',
     'prompts',
