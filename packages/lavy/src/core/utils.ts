@@ -74,9 +74,7 @@ export async function generatePrettierConfigString(
   // 纠正常见拼写错误，防止出现 "moudle.exports"
   const sanitized = result.replace(/moudle\.exports/g, 'module.exports')
 
-  if (moduleType === 'commonjs') {
-    return sanitized.replace(/export default /g, 'module.exports = ')
-  }
+  // 始终使用 ESM 语法输出，文件扩展名在写入阶段决定（.mjs 或 .js）
   return sanitized
 }
 
@@ -97,9 +95,7 @@ export async function generateStylelintConfigString(
   // 纠正常见拼写错误，防止出现 "moudle.exports"
   const sanitized = result.replace(/moudle\.exports/g, 'module.exports')
 
-  if (moduleType === 'commonjs') {
-    return sanitized.replace(/export default /g, 'module.exports = ')
-  }
+  // 始终使用 ESM 语法输出，文件扩展名在写入阶段决定（.mjs 或 .js）
   return sanitized
 }
 

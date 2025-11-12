@@ -5,7 +5,7 @@
 ## 特性
 - 交互式初始化，快速落地团队统一规范
 - Linter 可选：ESLint+Prettier 或 Biome（二选一）
-- 自动生成配置文件：eslint.config.js / prettier.config.js / stylelint.config.js 或 biome.json
+- 自动生成配置文件：eslint.config.js / prettier.config.js（ESM 项目）或 prettier.config.mjs（CommonJS 项目） / stylelint.config.js（ESM 项目）或 stylelint.config.mjs（CommonJS 项目） / biome.json
 - 自动安装对应依赖（含 husky、lint-staged）
 - 自动为 Git 仓库配置 pre-commit 与 commit-msg Hook
 - 内置提交信息校验命令：`lavy commit`，可生成/追加到 lavy.config.js
@@ -35,8 +35,8 @@ npx lavy -h
 
 ## 初始化后会做什么
 - 生成或更新配置文件：
-  - ESLint 模式：`eslint.config.js`、`prettier.config.js`、`stylelint.config.js`
-  - Biome 模式：`biome.json`、`stylelint.config.js`
+  - ESLint 模式：`eslint.config.js`、`prettier.config.js（ESM）/ prettier.config.mjs（CJS）`、`stylelint.config.js（ESM）/ stylelint.config.mjs（CJS）`
+  - Biome 模式：`biome.json`、`stylelint.config.js（ESM）/ stylelint.config.mjs（CJS）`
   - 通用：`lavy.config.js`（包含 project 与 lint 配置）
 - 根据语言与选择自动安装依赖：
   - ESLint 模式：安装 eslint、prettier 及相关插件

@@ -18,17 +18,10 @@ yarn add -D stylelint stylelint-config-lavy
 注意：该包要求 Node.js >= 16。
 
 ## 使用
-在项目根目录创建 `.stylelintrc.js` 或 `stylelint.config.js`：
+在项目根目录创建 `stylelint.config.js`（ESM 项目）或 `stylelint.config.mjs`（CommonJS 项目）：
 
 ```js
-module.exports = {
-  extends: [require.resolve('stylelint-config-lavy')],
-}
-```
-
-如果你使用 ESM：
-```js
-// stylelint.config.js
+// stylelint.config.js（ESM 项目）或 stylelint.config.mjs（CommonJS 项目）
 import config from 'stylelint-config-lavy'
 export default config
 ```
@@ -60,7 +53,7 @@ module.exports = {
 - ignoreFiles：`['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx']`
 
 ## 与 lavy CLI 的配合
-如果你使用 `lavy` CLI 初始化项目，选择了样式规范，该配置会被自动写入并安装依赖。你也可以手动使用本包。
+如果你使用 `lavy` CLI 初始化项目，选择了样式规范，该配置会被自动写入并安装依赖；同时，生成的配置文件会根据项目包类型选择扩展名（ESM 项目写入 .js，CommonJS 项目写入 .mjs）。
 
 ## 许可证
 MIT

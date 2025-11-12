@@ -19,7 +19,10 @@ import type {
 export async function generateConfigs(options: GenerateConfigOptions) {
   const { language, framework, style, moduleType } = options
 
-  // 生成 ESLint 配置
+  const pkgModuleType = getPackageJsonType()
+  const ext = pkgModuleType === 'module' ? 'js' : 'mjs'
+
+  // 生成 ESLint 配置（始终使用 ESM 语法，按包类型选择后缀）
   const eslintConfigContent = await generateEslintConfigString(options)
   const eslintConfigFilename = 'eslint.config.js'
   await fs.writeFile(
@@ -28,24 +31,23 @@ export async function generateConfigs(options: GenerateConfigOptions) {
     'utf-8',
   )
 
-  // 生成 Prettier 配置
-  const pkgModuleType = getPackageJsonType()
+  // 生成 Prettier 配置（始终使用 ESM 语法，按包类型选择后缀）
   const prettierContent = await generatePrettierConfigString({}, pkgModuleType)
-  const prettierFilename = 'prettier.config.js'
+  const prettierFilename = `prettier.config.${ext}`
   await fs.writeFile(
     resolve(process.cwd(), prettierFilename),
     prettierContent,
     'utf-8',
   )
 
-  // 生成 Stylelint 配置（style 为 none 时跳过）
+  // 生成 Stylelint 配置（style 为 none 时跳过；始终使用 ESM 语法，按包类型选择后缀）
   if (style !== 'none') {
     const stylelintContent = await generateStylelintConfigString(
       {},
       pkgModuleType,
       { framework },
     )
-    const stylelintFilename = 'stylelint.config.js'
+    const stylelintFilename = `stylelint.config.${ext}`
     await fs.writeFile(
       resolve(process.cwd(), stylelintFilename),
       stylelintContent,
@@ -72,11 +74,13 @@ export async function generateTemplate(options: {
 }) {
   const packageJsonType = getPackageJsonType()
   const moduleType = packageJsonType === 'module' ? 'esm' : 'cjs'
+  const ext = packageJsonType === 'module' ? 'js' : 'mjs'
   const { language, framework, style, mode = 'force', linter = 'eslint' } = options
 
+  // eslint.config 不用跟随 ext，始终使用 .js，eslint 原生支持
   const eslintConfigFilename = 'eslint.config.js'
-  const prettierFilename = 'prettier.config.js'
-  const stylelintFilename = 'stylelint.config.js'
+  const prettierConfigFilename = `prettier.config.${ext}`
+  const stylelintConfigFilename = `stylelint.config.${ext}`
   const biomeFilename = 'biome.json'
 
   const shouldWrite = (file: string) =>
@@ -100,10 +104,10 @@ export async function generateTemplate(options: {
   }
 
   // Prettier（当未使用 Biome 时生成）
-  if (!useBiome && shouldWrite(prettierFilename)) {
+  if (!useBiome && shouldWrite(prettierConfigFilename)) {
     const content = await generatePrettierConfigString({}, packageJsonType)
     await fs.writeFile(
-      resolve(process.cwd(), prettierFilename),
+      resolve(process.cwd(), prettierConfigFilename),
       content,
       'utf-8',
     )
@@ -116,10 +120,10 @@ export async function generateTemplate(options: {
   }
 
   // Stylelint（style 为 none 时跳过）
-  if (style !== 'none' && shouldWrite(stylelintFilename)) {
+  if (style !== 'none' && shouldWrite(stylelintConfigFilename)) {
     const content = await generateStylelintConfigString({}, packageJsonType, { framework })
     await fs.writeFile(
-      resolve(process.cwd(), stylelintFilename),
+      resolve(process.cwd(), stylelintConfigFilename),
       content,
       'utf-8',
     )

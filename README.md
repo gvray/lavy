@@ -32,9 +32,9 @@ npx lavy commit --help
 完成后会在项目根生成/更新：
 - lavy.config.js：包含项目语言、框架、样式、平台、linter 以及各配置文件路径
 - eslint.config.js（当选择 ESLint 时）
-- prettier.config.js（当选择 ESLint 时）
+- prettier.config.js（ESM 项目）或 prettier.config.mjs（CommonJS 项目）
 - biome.json（当选择 Biome 时）
-- stylelint.config.js（当选择使用样式规范时）
+- stylelint.config.js（ESM 项目）或 stylelint.config.mjs（CommonJS 项目）
 - 可选：husky hooks 与 lint-staged 规则、package.json scripts
 
 ## 可选 Linter 模式
@@ -99,7 +99,7 @@ npm i -D stylelint stylelint-config-lavy
 
 使用（ESM）：
 ```js
-// stylelint.config.js
+// stylelint.config.js（ESM 项目）或 stylelint.config.mjs（CommonJS 项目）
 import config from 'stylelint-config-lavy'
 export default config
 ```
@@ -112,7 +112,7 @@ module.exports = {
 }
 ```
 
-在通过 CLI 初始化时，生成的 stylelint.config.js 会继承 stylelint-config-lavy，并在 Vue 项目中额外继承 stylelint-config-recommended-vue；如果你使用 Vue 并出现 .vue 样式解析问题，可补充安装 postcss-html 并在配置中设置 customSyntax。
+在通过 CLI 初始化时，生成的 stylelint 配置会根据项目包类型选择扩展名（ESM 项目写入 .js，CommonJS 项目写入 .mjs）。如果你使用 Vue 并出现 .vue 样式解析问题，可补充安装 postcss-html 并在配置中设置 customSyntax。
 
 ## License
 

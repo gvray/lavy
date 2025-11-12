@@ -13,6 +13,7 @@ import type { LavyConfig } from '../types/config.js'
 import prompts from 'prompts'
 import { existsSync } from 'node:fs'
 import { join } from 'node:path'
+import { getPackageJsonType } from './utils'
 
 export async function runInit() {
   const answers = await promptOptions()
@@ -155,6 +156,8 @@ export async function runInit() {
 
   // 创建 lavy.config.js 配置文件（合并模式下如果已存在则保留旧配置）
   const useBiome = answers.linter === 'biome'
+  const pkgType = getPackageJsonType()
+  const ext = pkgType === 'module' ? 'js' : 'mjs'
   const config: LavyConfig = {
     project: {
       language: answers.language,
@@ -169,11 +172,11 @@ export async function runInit() {
         : { enabled: true, config: 'eslint.config.js' },
       stylelint: {
         enabled: answers.style !== 'none',
-        config: 'stylelint.config.js',
+        config: `stylelint.config.${ext}`,
       },
       prettier: useBiome
-        ? { enabled: false, config: 'prettier.config.js' }
-        : { enabled: true, config: 'prettier.config.js' },
+        ? { enabled: false, config: `prettier.config.${ext}` }
+        : { enabled: true, config: `prettier.config.${ext}` },
       biome: {
         enabled: useBiome,
         config: 'biome.json',
