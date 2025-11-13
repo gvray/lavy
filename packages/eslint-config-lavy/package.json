@@ -1,6 +1,6 @@
 {
 	"name": "eslint-config-lavy",
-	"version": "2.0.1",
+	"version": "2.0.2",
 	"description": "ESLint 9 flat config with TypeScript, React, Vue support",
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.js",

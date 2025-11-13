@@ -1,119 +1,42 @@
 # lavy
 
-一站式代码规范与提交验证工具集，包含 CLI 初始化、ESLint Flat Config 预设、Stylelint 配置等组件。
+企业级代码质量与工程配置套件，统一提供 CLI 初始化、ESLint Flat Config 预设、Stylelint 预设与提交信息校验能力，帮助团队快速落地一致、可维护的工程规范。
 
-- CLI：交互式初始化项目的代码检查与格式化配置（ESLint/Prettier 或 Biome），并可选择是否启用提交信息验证
-- ESLint：提供面向 JS/TS/React/Vue 的 Flat Config 预设，自动按平台注入 globals
-- Stylelint：提供符合标准的样式规范，支持与 Vue 结合
-- 提交验证：内置 `lavy commit` 命令，可生成并诊断提交信息规则
+- 统一：一套工具链覆盖前端主流场景（JS/TS/React/Vue）
+- 高效：交互式 CLI 以最少选择完成配置生成与依赖安装
+- 稳健：内置提交信息校验与可选 Git Hooks，保障工作流一致性
+
+## 组成
+
+- CLI：交互式初始化项目规范（ESLint+Prettier 或 Biome），并提供 `lavy commit` 提交信息校验命令
+- ESLint 预设：面向 JS/TS/React/Vue 的 Flat Config 集合，按平台注入 `globals`
+- Stylelint 预设：开箱可用的样式规范，覆盖通用与框架场景
 
 ## 快速开始
 
 ```bash
-# 安装 CLI
+# 安装 CLI（建议作为开发依赖）
 npm i -D lavy
 
-# 交互式初始化（使用子命令）
+# 交互式初始化
 npx lavy init
 
 # 查看帮助
 npx lavy -h
-npx lavy init --help
 npx lavy commit --help
 ```
 
-初始化过程中你可以选择：
-- 语言：JavaScript / TypeScript
-- 框架：None / React / Vue
-- 样式：CSS / SCSS / Less / None
-- Linter：ESLint + Prettier 或 Biome
-- 是否启用提交信息验证（husky + lint-staged）
+## 特性亮点
 
-完成后会在项目根生成/更新：
-- lavy.config.js：包含项目语言、框架、样式、平台、linter 以及各配置文件路径
-- eslint.config.js（当选择 ESLint 时）
-- prettier.config.js（ESM 项目）或 prettier.config.mjs（CommonJS 项目）
-- biome.json（当选择 Biome 时）
-- stylelint.config.js（ESM 项目）或 stylelint.config.mjs（CommonJS 项目）
-- 可选：husky hooks 与 lint-staged 规则、package.json scripts
+- 交互式流程：根据语言、框架、样式、Linter 偏好自动生成配置文件与脚本
+- 自动安装：初始化阶段自动选择并安装所需依赖
+- 提交校验：提供 `lavy commit`，可诊断并输出示例；支持一键追加到项目配置
 
-## 可选 Linter 模式
+## 子包
 
-- ESLint 模式：安装并生成 ESLint + Prettier 配置
-- Biome 模式：安装并生成 Biome 配置（禁用 ESLint/Prettier）
+- eslint-config-lavy：ESLint v9 Flat Config 预设（JS/TS/React/Vue）
+- stylelint-config-lavy：Stylelint 规范预设
 
-## 提交信息验证（Commit）
-
-提供 `lavy commit` 命令：
-- `lavy commit`：在当前 Git 仓库验证最近一次提交信息
-- `lavy commit --init`：将提交验证配置追加到 lavy.config.js
-- `lavy commit --config`：查看当前生效的提交验证配置
-- `lavy commit --test`：诊断常见场景并打印示例结果
-
-默认支持的类型：feat、fix、docs、style、refactor、perf、test、build、ci、chore、revert。
-
-## eslint-config-lavy
-
-ESLint 9 Flat Config 预设，支持 JavaScript、TypeScript、React、Vue，并内置按平台感知的 globals。
-
-安装（按需）：
-```bash
-npm i -D eslint-config-lavy eslint globals
-# TypeScript
-npm i -D @typescript-eslint/eslint-plugin @typescript-eslint/parser
-# React
-npm i -D eslint-plugin-react eslint-plugin-react-hooks
-# Vue
-npm i -D eslint-plugin-vue
-```
-
-使用（ESM）：
-```js
-// eslint.config.js
-import tsConfig from 'eslint-config-lavy/ts'
-export default [...tsConfig]
-```
-
-使用（CommonJS）：
-```js
-// eslint.config.js
-const { tsConfig } = require('eslint-config-lavy')
-module.exports = [...tsConfig]
-```
-
-其他子路径：
-- JavaScript：eslint-config-lavy/js
-- TypeScript：eslint-config-lavy/ts
-- React JSX：eslint-config-lavy/jsx
-- React TSX：eslint-config-lavy/tsx
-- Vue：eslint-config-lavy/vue
-
-## stylelint-config-lavy
-
-一个开箱即用的 Stylelint 配置，基于 stylelint-config-standard，并内置一些常用兼容调整。
-
-安装：
-```bash
-npm i -D stylelint stylelint-config-lavy
-```
-
-使用（ESM）：
-```js
-// stylelint.config.js（ESM 项目）或 stylelint.config.mjs（CommonJS 项目）
-import config from 'stylelint-config-lavy'
-export default config
-```
-
-使用（CommonJS）：
-```js
-// .stylelintrc.js
-module.exports = {
-  extends: [require.resolve('stylelint-config-lavy')]
-}
-```
-
-在通过 CLI 初始化时，生成的 stylelint 配置会根据项目包类型选择扩展名（ESM 项目写入 .js，CommonJS 项目写入 .mjs）。如果你使用 Vue 并出现 .vue 样式解析问题，可补充安装 postcss-html 并在配置中设置 customSyntax。
-
-## License
+## 许可证
 
 MIT
