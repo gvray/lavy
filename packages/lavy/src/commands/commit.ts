@@ -6,7 +6,7 @@ import {
 } from '../utils/config-loader'
 import { writeFileSync, existsSync, readFileSync } from 'node:fs'
 import path, { join } from 'node:path'
-import { execa } from 'execa'
+import { execa } from '../utils/execa'
 import ora from 'ora'
 import { DEFAULT_COMMIT_CONFIG, DEFAULT_COMMIT_TYPES } from '../config/index.js'
 

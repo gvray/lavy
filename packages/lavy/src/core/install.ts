@@ -1,4 +1,4 @@
-import { execa } from 'execa'
+import { execa } from '../utils/execa'
 import ora from 'ora'
 import { detectPackageManager } from '../utils/pm'
 import { join } from 'node:path'

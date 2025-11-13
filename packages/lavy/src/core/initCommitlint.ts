@@ -1,10 +1,10 @@
-import { execa } from 'execa'
 import { writeFileSync, existsSync, readFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { dirname } from 'node:path'
 import ora from 'ora'
 import type { Language, Framework, Style } from '../types'
+import { execa } from '../utils/execa'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)

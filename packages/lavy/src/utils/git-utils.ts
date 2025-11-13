@@ -1,4 +1,4 @@
-import { execa } from 'execa'
+import { execa } from '../utils/execa'
 import { existsSync } from 'node:fs'
 import { join } from 'node:path'
 
