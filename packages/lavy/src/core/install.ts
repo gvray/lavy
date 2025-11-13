@@ -4,10 +4,32 @@ import { detectPackageManager } from '../utils/pm'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { dirname } from 'node:path'
+import { existsSync, readFileSync } from 'node:fs'
 import type { InstallDepsOptions } from '../types'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
+
+// 检测并定位工作区根目录（支持 pnpm/yarn 的 monorepo）
+function findWorkspaceRoot(): string | null {
+  let dir = process.cwd()
+  while (true) {
+    // pnpm 工作区
+    if (existsSync(join(dir, 'pnpm-workspace.yaml'))) return dir
+    // package.json workspaces
+    const pkgPath = join(dir, 'package.json')
+    if (existsSync(pkgPath)) {
+      try {
+        const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'))
+        if (pkg?.workspaces) return dir
+      } catch {}
+    }
+    const parent = dirname(dir)
+    if (parent === dir) break
+    dir = parent
+  }
+  return null
+}
 
 export async function installDeps({
   language,
@@ -97,21 +119,31 @@ export async function installDeps({
         ? ['add', '-D', '--silent']
         : ['add', '-D', '--reporter', 'silent'] // pnpm
 
+  // 如果是 monorepo，优先在工作区根安装（pnpm: -w，yarn: -W），npm 通过 cwd 切换到根
+  const workspaceRoot = findWorkspaceRoot()
+  const execOptsBase: { stdio: 'pipe'; cwd?: string } = { stdio: 'pipe' }
+  if (workspaceRoot) {
+    if (pkgManager === 'pnpm') {
+      depsArgs.unshift('-w')
+      devArgs.unshift('-w')
+    } else if (pkgManager === 'yarn') {
+      depsArgs.push('-W')
+      devArgs.push('-W')
+    }
+    execOptsBase.cwd = workspaceRoot
+  }
+
   const spinner = ora(`📦 正在使用 ${pkgManager} 安装依赖...`).start()
 
   try {
     // 安装依赖
     if (deps.length > 0) {
-      await execa(pkgManager, [...depsArgs, ...deps], {
-        stdio: 'pipe',
-      })
+      await execa(pkgManager, [...depsArgs, ...deps], execOptsBase)
     }
 
     // 安装开发依赖
     if (devDeps.length > 0) {
-      await execa(pkgManager, [...devArgs, ...devDeps], {
-        stdio: 'pipe',
-      })
+      await execa(pkgManager, [...devArgs, ...devDeps], execOptsBase)
     }
 
     spinner.succeed('依赖安装完成')

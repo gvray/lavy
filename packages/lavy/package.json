@@ -1,6 +1,6 @@
 {
 	"name": "lavy",
-	"version": "2.0.2",
+	"version": "2.0.3",
 	"description": "Enterprise-level code quality and project configuration management tool",
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.js",
