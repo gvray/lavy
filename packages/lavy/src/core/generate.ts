@@ -24,7 +24,7 @@ export async function generateConfigs(options: GenerateConfigOptions) {
 
   // 生成 ESLint 配置（始终使用 ESM 语法，按包类型选择后缀）
   const eslintConfigContent = await generateEslintConfigString(options)
-  const eslintConfigFilename = 'eslint.config.js'
+  const eslintConfigFilename = `eslint.config.${ext}`
   await fs.writeFile(
     resolve(process.cwd(), eslintConfigFilename),
     eslintConfigContent,
