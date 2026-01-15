@@ -1,44 +1,58 @@
 # eslint-config-lavy
 
-面向前端工程的 ESLint v9 Flat Config 预设，覆盖 JavaScript、TypeScript、React、Vue 等主流场景，并根据项目平台自动注入 `globals`。
+[![npm version](https://img.shields.io/npm/v/eslint-config-lavy.svg)](https://www.npmjs.com/package/eslint-config-lavy)
+[![license](https://img.shields.io/npm/l/eslint-config-lavy.svg)](https://github.com/gvray/lavy/blob/main/LICENSE)
 
-## 安装
+ESLint v9 Flat Config presets for frontend projects, covering JavaScript, TypeScript, React, and Vue with automatic `globals` injection based on platform.
+
+## 📦 Installation
+
 ```bash
 npm i -D eslint-config-lavy eslint globals
-# 按需选择：
-# TypeScript：@typescript-eslint/eslint-plugin @typescript-eslint/parser
-# React：eslint-plugin-react eslint-plugin-react-hooks
-# Vue：eslint-plugin-vue
+
+# Optional peer dependencies:
+# TypeScript: @typescript-eslint/eslint-plugin @typescript-eslint/parser
+# React: eslint-plugin-react eslint-plugin-react-hooks
+# Vue: eslint-plugin-vue
 ```
 
-## 使用
+## 🚀 Usage
+
 ```js
 // eslint.config.js
 import tsConfig from 'eslint-config-lavy/ts'
 export default [...tsConfig]
 ```
-也可按需引入：
-- JavaScript：`eslint-config-lavy/js`
-- TypeScript：`eslint-config-lavy/ts`
-- React JSX：`eslint-config-lavy/jsx`
-- React TSX：`eslint-config-lavy/tsx`
-- Vue：`eslint-config-lavy/vue`
 
-或从主入口按命名导出使用：
+### Available Presets
+
+| Import Path | Description |
+|-------------|-------------|
+| `eslint-config-lavy/js` | JavaScript |
+| `eslint-config-lavy/ts` | TypeScript |
+| `eslint-config-lavy/jsx` | React JSX |
+| `eslint-config-lavy/tsx` | React TSX |
+| `eslint-config-lavy/vue` | Vue |
+
+### Named Exports
+
 ```js
 import { tsConfig, jsxConfig, tsxConfig, vueConfig } from 'eslint-config-lavy'
 export default [...tsConfig]
 ```
 
-## 平台感知（globals）
-在项目根创建 `lavy.config.ts` 或 `lavy.config.js` 指定平台：
+## 🌐 Platform-Aware Globals
+
+Create `lavy.config.ts` or `lavy.config.js` in your project root:
+
 ```ts
-// lavy.config.ts / lavy.config.js
 export default {
-  platform: 'browser' // 可选：'browser' | 'node' | 'universal'
+  platform: 'browser' // 'browser' | 'node' | 'universal'
 }
 ```
-预设将基于平台自动注入对应 `globals`，确保规则在不同运行环境下保持一致性。
 
-## 许可证
-MIT
+The preset automatically injects corresponding `globals` based on your platform setting.
+
+## 📜 License
+
+[MIT](../../LICENSE)

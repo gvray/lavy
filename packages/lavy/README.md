@@ -1,39 +1,58 @@
-# lavy（CLI）
+# Lavy CLI
 
-面向现代前端工程的交互式规范初始化与提交信息校验工具。通过简单的命令即可完成项目的 Linter 选择、配置文件生成、依赖安装与工作流接入。
+[![npm version](https://img.shields.io/npm/v/lavy.svg)](https://www.npmjs.com/package/lavy)
+[![license](https://img.shields.io/npm/l/lavy.svg)](https://github.com/gvray/lavy/blob/main/LICENSE)
 
-## 能力概览
-- 交互式初始化：ESLint+Prettier 或 Biome（二选一）
-- 配置生成：eslint.config.js、prettier.config.js、stylelint.config.js 或 biome.json
-- 依赖安装：根据选择自动安装所需包
-- Git Hooks：可选接入 pre-commit 与 commit-msg
-- 提交校验：内置 `lavy commit` 命令（诊断与示例输出）
+Interactive code quality initialization and commit message validation tool for modern frontend projects.
 
-## 快速开始
+## ✨ Features
+
+- **Interactive Setup**: Choose between ESLint+Prettier or Biome
+- **Config Generation**: Auto-generate `eslint.config.js`, `prettier.config.js`, `stylelint.config.js` or `biome.json`
+- **Auto Install**: Automatically install required dependencies
+- **Git Hooks**: Optional pre-commit and commit-msg hooks
+- **Commit Validation**: Built-in `lavy commit` command with diagnostics
+
+## 🚀 Quick Start
+
 ```bash
-# 安装
+# Install
 npm i -D lavy
 
-# 交互式初始化
+# Interactive initialization
 npx lavy init
 
-# 帮助与命令说明
+# View help
 npx lavy -h
 npx lavy commit --help
 ```
 
-## 命令
-- `lavy init`：初始化项目规范。按向导选择语言、框架、样式与 Linter，自动生成配置文件与脚本并安装依赖。
-- `lavy commit`：在当前 Git 仓库校验最近一次提交信息；支持：
-  - `--init`：将提交校验规则写入项目配置
-  - `--config`：查看当前规则
-  - `--test`：输出示例与诊断结果
+## 🔧 Commands
 
-## 初始化产出（示例）
-- ESLint 模式：`eslint.config.js`、`prettier.config.js`、`stylelint.config.js`
-- Biome 模式：`biome.json`、`stylelint.config.js`
-- 通用：`lavy.config.js`（包含项目与 Linter 配置）
-- 脚本：`lint`、`lint:fix`、`format`、`format:check` 等
+### `lavy init`
 
-## 许可证
-MIT
+Initialize project standards with interactive wizard. Select language, framework, style, and linter preferences.
+
+### `lavy commit`
+
+Validate commit messages in current Git repository.
+
+| Option | Description |
+|--------|-------------|
+| `--init` | Write commit validation rules to project config |
+| `--config` | View current rules |
+| `--test` | Output examples and diagnostic results |
+
+## 📄 Generated Files
+
+| Mode | Files |
+|------|-------|
+| ESLint | `eslint.config.js`, `prettier.config.js`, `stylelint.config.js` |
+| Biome | `biome.json`, `stylelint.config.js` |
+| Common | `lavy.config.js` (project & linter config) |
+
+**Scripts**: `lint`, `lint:fix`, `format`, `format:check`, etc.
+
+## 📜 License
+
+[MIT](../../LICENSE)

@@ -42,12 +42,20 @@
 	],
 	"keywords": [
 		"eslint",
+		"eslint-config",
 		"eslintconfig",
 		"flat-config",
+		"eslint9",
 		"lavy",
 		"typescript",
+		"javascript",
 		"react",
-		"vue"
+		"vue",
+		"jsx",
+		"tsx",
+		"globals",
+		"code-quality",
+		"linter"
 	],
 	"type": "module",
 	"scripts": {

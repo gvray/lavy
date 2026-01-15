@@ -18,9 +18,15 @@
 	"keywords": [
 		"stylelint",
 		"stylelint-config",
-		"config-standard",
-		"prettier",
-		"lavy"
+		"stylelint-standard",
+		"css",
+		"scss",
+		"less",
+		"style-lint",
+		"lavy",
+		"code-quality",
+		"frontend",
+		"css-modules"
 	],
 	"scripts": {
 		"build": "tsup",

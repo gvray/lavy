@@ -1,42 +1,56 @@
-# lavy
+# Lavy
 
-企业级代码质量与工程配置套件，统一提供 CLI 初始化、ESLint Flat Config 预设、Stylelint 预设与提交信息校验能力，帮助团队快速落地一致、可维护的工程规范。
+[![npm version](https://img.shields.io/npm/v/lavy.svg)](https://www.npmjs.com/package/lavy)
+[![license](https://img.shields.io/npm/l/lavy.svg)](https://github.com/gvray/lavy/blob/main/LICENSE)
 
-- 统一：一套工具链覆盖前端主流场景（JS/TS/React/Vue）
-- 高效：交互式 CLI 以最少选择完成配置生成与依赖安装
-- 稳健：内置提交信息校验与可选 Git Hooks，保障工作流一致性
+[English](./README.md) | [简体中文](./README.zh-CN.md)
 
-## 组成
+Enterprise-level code quality and engineering configuration toolkit. Provides CLI initialization, ESLint Flat Config presets, Stylelint presets, and commit message validation to help teams quickly establish consistent and maintainable engineering standards.
 
-- CLI：交互式初始化项目规范（ESLint+Prettier 或 Biome），并提供 `lavy commit` 提交信息校验命令
-- ESLint 预设：面向 JS/TS/React/Vue 的 Flat Config 集合，按平台注入 `globals`
-- Stylelint 预设：开箱可用的样式规范，覆盖通用与框架场景
+## ✨ Features
 
-## 快速开始
+- **Unified**: One toolchain covering mainstream frontend scenarios (JS/TS/React/Vue)
+- **Efficient**: Interactive CLI with minimal choices to generate configs and install dependencies
+- **Robust**: Built-in commit message validation with optional Git Hooks for workflow consistency
+
+## 📦 Packages
+
+| Package | Description | Version |
+|---------|-------------|---------|
+| [lavy](./packages/lavy) | Interactive CLI for project standards initialization | [![npm](https://img.shields.io/npm/v/lavy.svg)](https://www.npmjs.com/package/lavy) |
+| [eslint-config-lavy](./packages/eslint-config-lavy) | ESLint v9 Flat Config presets (JS/TS/React/Vue) | [![npm](https://img.shields.io/npm/v/eslint-config-lavy.svg)](https://www.npmjs.com/package/eslint-config-lavy) |
+| [stylelint-config-lavy](./packages/stylelint-config-lavy) | Stylelint config presets | [![npm](https://img.shields.io/npm/v/stylelint-config-lavy.svg)](https://www.npmjs.com/package/stylelint-config-lavy) |
+
+## 🚀 Quick Start
 
 ```bash
-# 安装 CLI（建议作为开发依赖）
+# Install CLI (recommended as dev dependency)
 npm i -D lavy
 
-# 交互式初始化
+# Interactive initialization
 npx lavy init
 
-# 查看帮助
+# View help
 npx lavy -h
 npx lavy commit --help
 ```
 
-## 特性亮点
+## 🔧 CLI Commands
 
-- 交互式流程：根据语言、框架、样式、Linter 偏好自动生成配置文件与脚本
-- 自动安装：初始化阶段自动选择并安装所需依赖
-- 提交校验：提供 `lavy commit`，可诊断并输出示例；支持一键追加到项目配置
+- **`lavy init`** - Initialize project standards with interactive wizard
+- **`lavy commit`** - Validate commit messages with diagnostics and examples
+  - `--init` - Write commit validation rules to project config
+  - `--config` - View current rules
+  - `--test` - Output examples and diagnostic results
 
-## 子包
+## 📄 Generated Files
 
-- eslint-config-lavy：ESLint v9 Flat Config 预设（JS/TS/React/Vue）
-- stylelint-config-lavy：Stylelint 规范预设
+| Mode | Generated Files |
+|------|-----------------|
+| ESLint | `eslint.config.js`, `prettier.config.js`, `stylelint.config.js` |
+| Biome | `biome.json`, `stylelint.config.js` |
+| Common | `lavy.config.js` (project & linter config) |
 
-## 许可证
+## 📜 License
 
-MIT
+[MIT](./LICENSE)
