@@ -1,9 +1,95 @@
 {
   "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "linter": {
+  "organizeImports": {
     "enabled": true
   },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "complexity": {
+        "noUselessCatch": "error",
+        "noUselessConstructor": "error",
+        "noUselessRename": "error",
+        "noUselessTernary": "error",
+        "noWith": "error",
+        "useOptionalChain": "error"
+      },
+      "correctness": {
+        "noConstAssign": "error",
+        "noUnusedImports": "error",
+        "noUnusedVariables": "error",
+        "useIsNan": "error"
+      },
+      "security": {
+        "noGlobalEval": "error"
+      },
+      "style": {
+        "noVar": "error",
+        "useConst": "error",
+        "useTemplate": "error"
+      },
+      "suspicious": {
+        "noConsoleLog": "warn",
+        "noDebugger": "error",
+        "noDoubleEquals": "error",
+        "noExplicitAny": "warn"
+      }{{#if jsx}}{{#unless vue}},
+      "a11y": {
+        "recommended": true
+      }{{/unless}}{{/if}}
+    }
+  },
   "formatter": {
-    "enabled": true
+    "enabled": true,
+    "indentStyle": "tab",
+    "indentWidth": 2,
+    "lineWidth": 100,
+    "lineEnding": "lf"
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "jsxQuoteStyle": "double",
+      "trailingCommas": "es5",
+      "semicolons": "asNeeded",
+      "arrowParentheses": "always",
+      "bracketSpacing": true
+    }{{#if tsx}},
+    "globals": ["React"]{{/if}}
+  },
+  "json": {
+    "parser": {
+      "allowComments": true,
+      "allowTrailingCommas": true
+    }
+  },{{#if css}}
+  "css": {
+    "formatter": {
+      "enabled": true,
+      "quoteStyle": "single"
+    },
+    "linter": {
+      "enabled": true
+    }
+  },{{/if}}
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "files": {
+    "ignoreUnknown": true,
+    "ignore": [
+      "node_modules",
+      "dist",
+      "build",{{#if jsx}}
+      ".next",{{/if}}{{#if vue}}
+      ".nuxt",
+      ".output",{{/if}}
+      "coverage",
+      "*.min.js",
+      "*.min.css"
+    ]
   }
 }

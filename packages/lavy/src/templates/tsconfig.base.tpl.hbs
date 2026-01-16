@@ -1,17 +1,45 @@
 {
+  "$schema": "https://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "ES2022",
+    "lib": ["ES2022"{{#if browser}}, "DOM", "DOM.Iterable"{{/if}}],
     "module": "{{#if esm}}ESNext{{else}}CommonJS{{/if}}",
     "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "noEmit": true,
+
     "strict": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "exactOptionalPropertyTypes": true,
+    "useUnknownInCatchVariables": true,
+
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
     {{#if react}}
     "jsx": "react-jsx",
     {{/if}}
-    "resolveJsonModule": true,
-    "isolatedModules": true,
+    {{#if vue}}
+    "jsx": "preserve",
+    {{/if}}
     "types": ["node"]
   }
 }

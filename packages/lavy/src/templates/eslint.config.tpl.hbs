@@ -1,5 +1,4 @@
 import { defineConfig } from 'eslint/config'
-
 {{#if js}}
 import jsConfig from 'eslint-config-lavy/js'
 {{/if}}
@@ -17,6 +16,23 @@ import vueConfig from 'eslint-config-lavy/vue'
 {{/if}}
 
 export default defineConfig([
+  // Global ignores
+  {
+    ignores: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/build/**',
+      '**/coverage/**',
+      '**/.next/**',
+      '**/.nuxt/**',
+      '**/.output/**',
+      '**/*.min.js',
+      '**/public/**',
+      '**/vendor/**'
+    ]
+  },
+
+  // Base configs
 {{#if js}}
   ...jsConfig,
 {{/if}}
@@ -32,6 +48,8 @@ export default defineConfig([
 {{#if vue}}
   ...vueConfig,
 {{/if}}
+
+  // Project-specific overrides
   {
 {{#if ts}}
     {{#if tsx}}
@@ -40,7 +58,7 @@ export default defineConfig([
       {{#if vue}}
     files: ['**/*.{ts,vue}'],
       {{else}}
-    files: ['**/*.{ts}'],
+    files: ['**/*.ts'],
       {{/if}}
     {{/if}}
 {{else}}
@@ -50,12 +68,21 @@ export default defineConfig([
       {{#if vue}}
     files: ['**/*.{js,vue}'],
       {{else}}
-    files: ['**/*.{js}'],
+    files: ['**/*.js'],
       {{/if}}
     {{/if}}
 {{/if}}
     rules: {
-      // You can add project-specific rules here.
+      // Add project-specific rules here
+    }
+  },
+
+  // Test files - relaxed rules
+  {
+    files: ['**/*.test.{js,ts,tsx}', '**/*.spec.{js,ts,tsx}', '**/tests/**', '**/__tests__/**'],
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'off',
+      'no-console': 'off'
     }
   }
 ])
