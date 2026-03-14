@@ -75,10 +75,16 @@ export async function generateTemplate(options: {
   const packageJsonType = getPackageJsonType()
   const moduleType = packageJsonType === 'module' ? 'esm' : 'cjs'
   const ext = packageJsonType === 'module' ? 'js' : 'mjs'
-  const { language, framework, style, mode = 'force', linter = 'eslint' } = options
+  const {
+    language,
+    framework,
+    style,
+    mode = 'force',
+    linter = 'eslint',
+  } = options
 
-  // eslint.config 不用跟随 ext，始终使用 .js，eslint 原生支持
-  const eslintConfigFilename = 'eslint.config.js'
+  // eslint.config 需要跟随 ext：CommonJS 项目用 .mjs，ESM 项目用 .js
+  const eslintConfigFilename = `eslint.config.${ext}`
   const prettierConfigFilename = `prettier.config.${ext}`
   const stylelintConfigFilename = `stylelint.config.${ext}`
   const biomeFilename = 'biome.json'
@@ -116,12 +122,18 @@ export async function generateTemplate(options: {
   // Biome（当选择使用 Biome 时生成默认配置）
   if (useBiome && shouldWrite(biomeFilename)) {
     const biomeContent = await generateBiomeConfigString()
-    await fs.writeFile(resolve(process.cwd(), biomeFilename), biomeContent, 'utf-8')
+    await fs.writeFile(
+      resolve(process.cwd(), biomeFilename),
+      biomeContent,
+      'utf-8',
+    )
   }
 
   // Stylelint（style 为 none 时跳过）
   if (style !== 'none' && shouldWrite(stylelintConfigFilename)) {
-    const content = await generateStylelintConfigString({}, packageJsonType, { framework })
+    const content = await generateStylelintConfigString({}, packageJsonType, {
+      framework,
+    })
     await fs.writeFile(
       resolve(process.cwd(), stylelintConfigFilename),
       content,
